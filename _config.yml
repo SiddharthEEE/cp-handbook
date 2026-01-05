@@ -1,0 +1,11 @@
+title: CP Handbook
+description: Competitive Programming Handbook
+baseurl: "/cp-handbook"
+url: "https://siddhartheee.github.io"
+
+collections:
+  pages:
+    output: true
+    permalink: /:path/
+
+markdown: kramdown

@@ -1,0 +1,68 @@
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <a href="{{ '/' | relative_url }}" class="cp-handbook-link">
+      <svg
+        class="cp-icon"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <polyline points="16 18 22 12 16 6"></polyline>
+        <polyline points="8 6 2 12 8 18"></polyline>
+      </svg>
+      <span class="cp-text">CP Handbook</span>
+    </a>
+  </div>
+
+  <div class="sidebar-search">
+    <div class="search-wrapper">
+      <input
+        type="text"
+        id="sidebarSearch"
+        placeholder="Search topics..."
+        oninput="filterSidebar()"
+      />
+      <button id="clearSearchBtn" onclick="clearSearch()">✕</button>
+    </div>
+  </div>
+
+  <div class="phase-selector">
+    <select id="phaseSelect" onchange="onPhaseChange()">
+      {% for phase in site.data.navigation.phases %}
+      <option value="{{ phase.id }}">{{ phase.title }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="sidebar-content">
+    {% for phase in site.data.navigation.phases %}
+    <div
+      class="phase-container"
+      id="container-{{ phase.id }}"
+      style="display: none"
+    >
+      {% for topic in phase.topics %}
+      <div class="topic">
+        <div
+          class="topic-title {{ phase.id }}"
+          onclick="toggle('{{ phase.id }}-{{ topic.id }}')"
+        >
+          {{ topic.title }}
+        </div>
+
+        <div class="topic-body" id="{{ phase.id }}-{{ topic.id }}">
+          {% for item in topic.items %}
+          <a class="topic-link" href="{{ item.url | relative_url }}">
+            {{ item.title }}
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endfor %}
+  </div>
+</aside>

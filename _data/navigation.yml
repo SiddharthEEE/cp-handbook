@@ -1,0 +1,251 @@
+phases:
+  - title: Phase 1
+    id: phase1
+    topics:
+      - title: Basics
+        id: basics
+        items:
+          - title: Prefix Sum
+            url: /phase1/basics/prefix-sum
+          - title: Binary Search
+            url: /phase1/basics/binary-search
+          - title: Ternary Search
+            url: /phase1/basics/ternary-search
+          - title: Two Pointers
+            url: /phase1/basics/two-pointers
+          - title: Bit Manipulation
+            url: /phase1/basics/bit-manipulation
+          - title: Monotonic Stack
+            url: /phase1/basics/monotonic-stack
+          - title: Sorting Algorithms
+            url: /phase1/basics/sorting-algorithms
+          - title: Exchange Arguments
+            url: /phase1/basics/exchange-arguments
+
+      - title: Maths
+        id: maths
+        items:
+          - title: Basics of Maths
+            url: /phase1/maths/basics-of-maths
+          - title: Binary Exponentiation
+            url: /phase1/maths/binary-exponentiation
+          - title: Primality Tests
+            url: /phase1/maths/primality-tests
+          - title: Sieve of Eratosthenes
+            url: /phase1/maths/sieve-of-eratosthenes
+          - title: Extended Euclidean Algorithm
+            url: /phase1/maths/extended-euclidean-algorithm
+          - title: Modular Multiplicative Inverse
+            url: /phase1/maths/modular-multiplicative-inverse
+          - title: Linear Diophantine Equations
+            url: /phase1/maths/linear-diophantine-equations
+          - title: Euler's Totient Function
+            url: /phase1/maths/eulers-totient-function
+          - title: Combinatorics
+            url: /phase1/maths/combinatorics
+          - title: Inclusion Exclusion Principle
+            url: /phase1/maths/inclusion-exclusion-principle
+          - title: GCD and LCM
+            url: /phase1/maths/gcd-lcm
+          - title: Probability and Expected Value
+            url: /phase1/maths/probability-expected-value
+
+      - title: Graphs
+        id: graphs
+        items:
+          - title: Traversals (DFS, BFS)
+            url: /phase1/graphs/traversals
+          - title: 0-1 BFS
+            url: /phase1/graphs/0-1-bfs
+          - title: Dijkstra's Algorithm
+            url: /phase1/graphs/dijkstras-algorithm
+          - title: Bellman-Ford Algorithm
+            url: /phase1/graphs/bellman-ford-algorithm
+          - title: Floyd-Warshall Algorithm
+            url: /phase1/graphs/floyd-warshall-algorithm
+          - title: Topological Sort
+            url: /phase1/graphs/topological-sort
+          - title: Kruskal's Algorithm
+            url: /phase1/graphs/kruskals-algorithm
+          - title: BFS Trick
+            url: /phase1/graphs/bfs-trick
+          - title: Strongly Connected Components
+            url: /phase1/graphs/strongly-connected-components
+
+      - title: DSU/Small to Large Merging
+        id: dsu
+        items:
+          - title: DSU
+            url: /phase1/dsu/dsu
+          - title: Small to Large Merging
+            url: /phase1/dsu/small-to-large-merging
+
+      - title: Trees
+        id: trees
+        items:
+          - title: Tree Diameter
+            url: /phase1/trees/diameter
+          - title: Lowest Common Ancestor
+            url: /phase1/trees/lowest-common-ancestor
+          - title: DP on Trees
+            url: /phase1/trees/dp-on-trees
+
+      - title: Dynamic Programming
+        id: dp
+        items:
+          - title: Recursion
+            url: /phase1/dp/recursion
+          - title: Standard DP
+            url: /phase1/dp/standard-dp
+          - title: Bitmask DP
+            url: /phase1/dp/bitmask-dp
+          - title: Digit DP
+            url: /phase1/dp/digit-dp
+          - title: DP on Broken Profile
+            url: /phase1/dp/dp-on-broken-profile
+
+      - title: Hashing
+        id: hashing
+        items:
+          - title: String Hashing
+            url: /phase1/hashing/string-hashing
+          - title: XOR Hashing
+            url: /phase1/hashing/xor-hashing
+          - title: Multiset Hashing
+            url: /phase1/hashing/multiset-hashing
+          - title: Tree Hashing
+            url: /phase1/hashing/tree-hashing
+
+      - title: Miscellaneous
+        id: misc
+        items:
+          - title: Meet in the Middle
+            url: /phase1/misc/meet-in-the-middle
+
+  - title: Phase 2
+    id: phase2
+    topics:
+      - title: Graphs
+        id: graphs
+        items:
+          - title: Eulerian Path and Circuit
+            url: /phase2/graphs/eulerian-path-circuit
+          - title: Hamiltonian Path and Circuit
+            url: /phase2/graphs/hamiltonian-path-circuit
+          - title: Bridges and Articulation Points
+            url: /phase2/graphs/bridges-articulation-points
+          - title: Boruvka's Algorithm
+            url: /phase2/graphs/boruvkas-algorithm
+
+      - title: Trees
+        id: trees
+        items:
+          - title: Euler Tour
+            url: /phase2/trees/euler-tour
+          - title: Tree Centroid
+            url: /phase2/trees/tree-centroid
+
+      - title: Data Structures
+        id: data-structures
+        items:
+          - title: Minimum Stack/Queue
+            url: /phase2/data-structures/minimum-stack-queue
+          - title: Bitset
+            url: /phase2/data-structures/bitset
+          - title: Trie
+            url: /phase2/data-structures/trie
+          - title: Sparse Table
+            url: /phase2/data-structures/sparse-table
+          - title: Segment Tree
+            url: /phase2/data-structures/segment-tree
+
+      - title: Maths
+        id: maths
+        items:
+          - title: Matrix Exponentiation
+            url: /phase2/maths/matrix-exponentiation
+          - title: Manhattan Distance
+            url: /phase2/maths/manhattan-distance
+          - title: XOR Basis
+            url: /phase2/maths/xor-basis
+          - title: Chinese Remainder Theorem
+            url: /phase2/maths/chinese-remainder-theorem
+          - title: Dilworth's Theorem
+            url: /phase2/maths/dilworths-theorem
+
+  - title: Phase 3
+    id: phase3
+    topics:
+      - title: Sqrt Decomposition
+        id: sqrt
+        items:
+          - title: Forms of Sqrt Decomposition
+            url: /phase3/sqrt/forms-of-sqrt-decomposition
+          - title: Mo's Algorithm on Trees
+            url: /phase3/sqrt/mos-algorithm-on-trees
+
+      - title: Game Theory
+        id: game-theory
+        items:
+          - title: Games on Graphs
+            url: /phase3/game-theory/games-on-graphs
+          - title: Sprague Grundy Theorem
+            url: /phase3/game-theory/sprague-grundy-theorem
+
+      - title: Trees
+        id: trees
+        items:
+          - title: Centroid Decomposition
+            url: /phase3/trees/centroid-decomposition
+          - title: Heavy Light Decomposition
+            url: /phase3/trees/heavy-light-decomposition
+          - title: Virtual/Auxiliary Trees
+            url: /phase3/trees/virtual-auxiliary-trees
+
+      - title: Persistent Data Structures
+        id: persistent-data-structures
+        items:
+          - title: Persistent Segment Tree
+            url: /phase3/persistent-data-structures/persistent-segment-tree
+          - title: Persistent DSU
+            url: /phase3/persistent-data-structures/persistent-dsu
+          - title: Persistent Trie
+            url: /phase3/persistent-data-structures/persistent-trie
+
+      - title: Dynamic Programming
+        id: dp
+        items:
+          - title: Convex Hull Trick
+            url: /phase3/dp/convex-hull-trick
+          - title: Divide and Conquer DP
+            url: /phase3/dp/divide-and-conquer-dp
+          - title: Knuth's Optimization
+            url: /phase3/dp/knuths-optimization
+          - title: Slope Trick
+            url: /phase3/dp/slope-trick
+
+      - title: Maths
+        id: maths
+        items:
+          - title: Fast Fourier Transform
+            url: /phase3/maths/fft
+          - title: Lagrange Interpolation
+            url: /phase3/maths/lagrange-interpolation
+
+      - title: Graphs
+        id: graphs
+        items:
+          - title: 2-SAT
+            url: /phase3/graphs/2-sat
+          - title: Max Flow
+            url: /phase3/graphs/max-flow
+          - title: Min Cost Max Flow
+            url: /phase3/graphs/min-cost-max-flow
+
+      - title: Miscellaneous
+        id: misc
+        items:
+          - title: Parallel Binary Search
+            url: /phase3/misc/parallel-binary-search
+          - title: Randomized Algorithms
+            url: /phase3/misc/randomized-algorithms
