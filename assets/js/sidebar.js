@@ -188,13 +188,6 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
   }
-
-  document.querySelectorAll("details").forEach((details) => {
-    const summary = details.querySelector("summary");
-    if (summary && summary.textContent.trim() === "Problem") {
-      details.open = true;
-    }
-  });
 });
 
 document.addEventListener("click", (e) => {
