@@ -45,3 +45,18 @@ function copySample(button) {
       setTimeout(() => (button.innerText = "Copy"), 1000);
     });
 }
+
+function toggleSolution(button) {
+  const container = button.nextElementSibling;
+  const isHidden = container.style.display === "none";
+
+  if (isHidden) {
+    container.style.display = "block";
+    button.textContent = "Hide Solution";
+    button.classList.add("active");
+  } else {
+    container.style.display = "none";
+    button.textContent = "Show Solution";
+    button.classList.remove("active");
+  }
+}

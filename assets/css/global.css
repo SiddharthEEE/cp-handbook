@@ -571,3 +571,39 @@ pre.sample-io {
 details > summary[data-type="solution"] + .spoiler-content {
   background-color: #f4f9f6;
 }
+
+.solution-toggle-btn {
+  margin-left: 10px;
+  float: right;
+  padding: 3px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  vertical-align: middle;
+  background-color: #f8fafc;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+}
+
+.solution-toggle-btn:hover {
+  background-color: #f1f5f9;
+  border-color: #94a3b8;
+}
+
+.solution-toggle-btn.active {
+  background-color: #fff1f2;
+  color: #be123c;
+  border: 1px solid #fda4af;
+}
+
+.solution-toggle-btn.active:hover {
+  background-color: #ffe4e6;
+  border-color: #fb7185;
+}
+
+.practice-solution-container {
+  margin-top: 12px;
+  margin-bottom: 12px;
+}

@@ -537,8 +537,8 @@ $$
 Let us define:
 
 <ul>
-    <li>$\displaystyle \text{cnt}_i = \sum_{\substack{j = 1 \\ l_j \le i \le r_j}}^{q} 1$ : the number of intervals $[l_j,r_j]$ such that $l_j \le i \le r_j$.</li>
-    <li>$\displaystyle \text{sum}_i = \sum_{\substack{j = 1 \\ l_j \le i \le r_j}}^{q} l_j$ : the sum of $l_j$ over all intervals $[l_j,r_j]$ such that $l_j \le i \le r_j$.</li>
+    <li>$\displaystyle \text{cnt}_i = \sum_{\substack{j = 1 \\ l_j \le i \le r_j}}^{q} 1$ : the number of intervals $[l_j,r_j]$ such that $l_j \le i \le r_j, \quad \forall \; 1 \le i \le n$.</li>
+    <li>$\displaystyle \text{sum}_i = \sum_{\substack{j = 1 \\ l_j \le i \le r_j}}^{q} l_j$ : the sum of $l_j$ over all intervals $[l_j,r_j]$ such that $l_j \le i \le r_j, \quad \forall \; 1 \le i \le n$.</li>
 </ul><br>
 
 We can rewrite the expression for $\text{val}_i$ as:
@@ -657,6 +657,7 @@ We will use the technique of <b>Coordinate Compression</b> to simplify this prob
     <li>Initialize an empty vector $\text{all}$.</li>
     <li>Insert all values of $a_i$ and $b_i$ in $\text{all}$.</li>
     <li>Sort $\text{all}$ and erase duplicates from it.</li>
+    <li>Let $m$ be the final size of the vector $\text{all}$</li>
 </ul><br>
 
 For each compressed index $i$, there are two distinct parts of days to consider:
@@ -669,8 +670,8 @@ For each compressed index $i$, there are two distinct parts of days to consider:
 We will handle these two parts separately using arrays $\text{end}$ and $\text{mid}$ respectively:
 
 <ul>
-    <li>$\displaystyle \text{end}_i = \sum_{\substack{j = 1 \\ l_j \le \text{all}_i \le r_j}}^{n} c_j$ : the total cost of all services active on day $\text{all}_i$.</li>
-    <li>$\displaystyle \text{mid}_i = \sum_{\substack{j = 1 \\ l_j \le \text{all}_i+1 \\  \text{all}_{i+1}-1 \le r_j}}^{n} c_j$ : the total cost of all services active on every day in $[\text{all}_i+1, \text{all}_{i+1}-1]$.</li>
+    <li>$\displaystyle \text{end}_i = \sum_{\substack{j = 1 \\ l_j \le \text{all}_i \le r_j}}^{n} c_j$ : the total cost of all services active on day $\text{all}_i, \quad \forall \; 0 \le i < m$.</li>
+    <li>$\displaystyle \text{mid}_i = \sum_{\substack{j = 1 \\ l_j \le \text{all}_i+1 \\  \text{all}_{i+1}-1 \le r_j}}^{n} c_j$ : the total cost of all services active on every day in $[\text{all}_i+1, \text{all}_{i+1}-1], \quad \forall \; 0 \le i < m-1$.</li>
 </ul><br>
 
 Basically, the array $\text{end}$ handles individual important days (i.e., days that are either start or end of a service interval) and the array $\text{mid}$ handles continuous stretches (i.e., days that are neither start not end of any service interval and hence have identical cost). <br><br>
@@ -923,7 +924,7 @@ For each test case, print the value of the given expression modulo $998244353$.<
 <details>
 <summary data-type="solution">Solution</summary>
 <div class="spoiler-content">
-<span style="color:red;"><b>NOTE:</b></span>
+<span style="color:red;"><i><b>NOTE:</b></i></span>
 <i>This solution involves the concept of <b>Changing the Order of Summation</b>. There exists another solution to this problem which is explained in the <a href="{{ site.baseurl }}/phase1/maths/combinatorics" target="_blank">Combinatorics</a> section.</i><br><br>
 
 Build the prefix sum array $\text{pre}$ of the array $a$. Also build the prefix sum array $\text{pre2}$ of the array $\text{pre}$.<br><br>
@@ -1295,7 +1296,7 @@ signed main() {
 </details>
 
 <details>
-<summary><a href="https://codeforces.com/group/8O0H35Bmf0/contest/549980/problem/A" target="_blank"><b>Problem</b></a></summary>
+<summary><a href="https://codeforces.com/group/YaoVTlPgAO/contest/662696/problem/A" target="_blank"><b>Problem</b></a></summary>
 <div class="spoiler-content">
 You are given an $n \times m$ grid. Let $a_{i,j}$ denote the value of the cell at the $i^{th}$ row from the top and the $j^{th}$ column from the left. Initially, each cell has a value $0$.<br><br>
 
@@ -1407,25 +1408,361 @@ signed main() {
 ### Practice Problems
 
 <ul>
-    <li><a href="https://cses.fi/problemset/task/1662" target="_blank">CSES - Subarray Divisibility</a></li>
-    <li><a href="https://codeforces.com/contest/1398/problem/C" target="_blank">Codeforces - Good Subarrays</a></li>
-    <li><a href="https://atcoder.jp/contests/abc408/tasks/abc408_c" target="_blank">Atcoder - Not All Covered</a></li>
-    <li><a href="https://atcoder.jp/contests/tokiomarine2020/tasks/tokiomarine2020_c" target="_blank">Atcoder - Lamps</a></li>
-    <li><a href="https://codeforces.com/problemset/problem/1343/D" target="_blank">Codeforces - Constant Palindrome Sum</a></li>
-    <li><a href="https://codeforces.com/contest/295/problem/A" target="_blank">Codeforces - Greg and Array</a></li>
-    <li><a href="https://codeforces.com/contest/276/problem/C" target="_blank">Codeforces - Little Girl and Maximum Sum</a></li>
-    <li><a href="https://codeforces.com/problemset/problem/466/C" target="_blank">Codeforces - Number of Ways</a></li>
-    <li><a href="https://codeforces.com/problemset/problem/1864/D" target="_blank">Codeforces - Matrix Cascade</a></li>
-    <li><a href="https://codeforces.com/problemset/problem/2056/D" target="_blank">Codeforces - Unique Median</a></li>
-    <li><a href="https://codeforces.com/contest/2121/problem/F" target="_blank">Codeforces - Yamakasi</a></li>
-    <li><a href="https://codeforces.com/contest/1826/problem/D" target="_blank">Codeforces - Running Miles</a></li>
-    <li><a href="https://codeforces.com/contest/612/problem/D" target="_blank">Codeforces - The Union of k-Segments</a></li>
-    <li><a href="https://codeforces.com/problemset/problem/689/E" target="_blank">Codeforces - Mike and Geometry Problem</a></li>
-    <li><a href="https://codeforces.com/contest/2179/problem/H" target="_blank">Codeforces - Blackslex and Plants</a></li>
-    <li><a href="https://atcoder.jp/contests/abc438/tasks/abc438_d" target="_blank">Atcoder - Tail of Snake</a></li>
-    <li><a href="https://atcoder.jp/contests/abc356/tasks/abc356_e" target="_blank">Atcoder - Max/Min</a></li>
-    <li><a href="https://atcoder.jp/contests/abc158/tasks/abc158_e" target="_blank">Atcoder - Divisible Substring</a></li>
-    <li><a href="https://codeforces.com/problemset/problem/835/C" target="_blank">Codeforces - Star Sky</a></li>
-    <li><a href="https://atcoder.jp/contests/abc410/tasks/abc410_f" target="_blank">Atcoder - Balanced Rectangles</a></li>
-    <li><a href="https://www.codechef.com/problems/CENS20A" target="_blank">CodeChef - Cherry and Bits</a></li>
+    <li>
+    <a href="https://cses.fi/problemset/task/1662" target="_blank">CSES - Subarray Divisibility</a>
+    <button class="solution-toggle-btn" onclick="toggleSolution(this)">Show Solution</button>
+    <div class="practice-solution-container" style="display: none;">
+        <details>
+            <summary data-type="solution">Solution</summary>
+            <div class="spoiler-content">
+            To be added.
+                </div>
+        </details>
+        <details>
+            <summary data-type="code">Code (C++)</summary>
+            <pre class="spoiler-code"><code class="cpp"><script type="text/plain">Code
+            </script></code></pre>
+        </details>
+    </div>
+    </li>
+    <li>
+    <a href="https://codeforces.com/contest/1398/problem/C" target="_blank">Codeforces - Good Subarrays</a>
+    <button class="solution-toggle-btn" onclick="toggleSolution(this)">Show Solution</button>
+    <div class="practice-solution-container" style="display: none;">
+        <details>
+            <summary data-type="solution">Solution</summary>
+            <div class="spoiler-content">
+            To be added.
+                </div>
+        </details>
+        <details>
+            <summary data-type="code">Code (C++)</summary>
+            <pre class="spoiler-code"><code class="cpp"><script type="text/plain">Code
+            </script></code></pre>
+        </details>
+    </div>
+    </li>
+    <li>
+    <a href="https://atcoder.jp/contests/abc408/tasks/abc408_c" target="_blank">Atcoder - Not All Covered</a>
+    <button class="solution-toggle-btn" onclick="toggleSolution(this)">Show Solution</button>
+    <div class="practice-solution-container" style="display: none;">
+        <details>
+            <summary data-type="solution">Solution</summary>
+            <div class="spoiler-content">
+            To be added.
+                </div>
+        </details>
+        <details>
+            <summary data-type="code">Code (C++)</summary>
+            <pre class="spoiler-code"><code class="cpp"><script type="text/plain">Code
+            </script></code></pre>
+        </details>
+    </div>
+    </li>
+    <li>
+    <a href="https://atcoder.jp/contests/tokiomarine2020/tasks/tokiomarine2020_c" target="_blank">Atcoder - Lamps</a>
+    <button class="solution-toggle-btn" onclick="toggleSolution(this)">Show Solution</button>
+    <div class="practice-solution-container" style="display: none;">
+        <details>
+            <summary data-type="solution">Solution</summary>
+            <div class="spoiler-content">
+            To be added.
+                </div>
+        </details>
+        <details>
+            <summary data-type="code">Code (C++)</summary>
+            <pre class="spoiler-code"><code class="cpp"><script type="text/plain">Code
+            </script></code></pre>
+        </details>
+    </div>
+    </li>
+    <li>
+    <a href="https://codeforces.com/problemset/problem/1343/D" target="_blank">Codeforces - Constant Palindrome Sum</a>
+    <button class="solution-toggle-btn" onclick="toggleSolution(this)">Show Solution</button>
+    <div class="practice-solution-container" style="display: none;">
+        <details>
+            <summary data-type="solution">Solution</summary>
+            <div class="spoiler-content">
+            To be added.
+                </div>
+        </details>
+        <details>
+            <summary data-type="code">Code (C++)</summary>
+            <pre class="spoiler-code"><code class="cpp"><script type="text/plain">Code
+            </script></code></pre>
+        </details>
+    </div>
+    </li>
+    <li>
+    <a href="https://codeforces.com/contest/295/problem/A" target="_blank">Codeforces - Greg and Array</a>
+    <button class="solution-toggle-btn" onclick="toggleSolution(this)">Show Solution</button>
+    <div class="practice-solution-container" style="display: none;">
+        <details>
+            <summary data-type="solution">Solution</summary>
+            <div class="spoiler-content">
+            To be added.
+                </div>
+        </details>
+        <details>
+            <summary data-type="code">Code (C++)</summary>
+            <pre class="spoiler-code"><code class="cpp"><script type="text/plain">Code
+            </script></code></pre>
+        </details>
+    </div>
+    </li>
+    <li>
+    <a href="https://codeforces.com/contest/276/problem/C" target="_blank">Codeforces - Little Girl and Maximum Sum</a>
+    <button class="solution-toggle-btn" onclick="toggleSolution(this)">Show Solution</button>
+    <div class="practice-solution-container" style="display: none;">
+        <details>
+            <summary data-type="solution">Solution</summary>
+            <div class="spoiler-content">
+            To be added.
+                </div>
+        </details>
+        <details>
+            <summary data-type="code">Code (C++)</summary>
+            <pre class="spoiler-code"><code class="cpp"><script type="text/plain">Code
+            </script></code></pre>
+        </details>
+    </div>
+    </li>
+    <li>
+    <a href="https://codeforces.com/problemset/problem/466/C" target="_blank">Codeforces - Number of Ways</a>
+    <button class="solution-toggle-btn" onclick="toggleSolution(this)">Show Solution</button>
+    <div class="practice-solution-container" style="display: none;">
+        <details>
+            <summary data-type="solution">Solution</summary>
+            <div class="spoiler-content">
+            To be added.
+                </div>
+        </details>
+        <details>
+            <summary data-type="code">Code (C++)</summary>
+            <pre class="spoiler-code"><code class="cpp"><script type="text/plain">Code
+            </script></code></pre>
+        </details>
+    </div>
+    </li>
+    <li>
+    <a href="https://codeforces.com/problemset/problem/1864/D" target="_blank">Codeforces - Matrix Cascade</a>
+    <button class="solution-toggle-btn" onclick="toggleSolution(this)">Show Solution</button>
+    <div class="practice-solution-container" style="display: none;">
+        <details>
+            <summary data-type="solution">Solution</summary>
+            <div class="spoiler-content">
+            To be added.
+                </div>
+        </details>
+        <details>
+            <summary data-type="code">Code (C++)</summary>
+            <pre class="spoiler-code"><code class="cpp"><script type="text/plain">Code
+            </script></code></pre>
+        </details>
+    </div>
+    </li>
+    <li>
+    <a href="https://codeforces.com/problemset/problem/2056/D" target="_blank">Codeforces - Unique Median</a>
+    <button class="solution-toggle-btn" onclick="toggleSolution(this)">Show Solution</button>
+    <div class="practice-solution-container" style="display: none;">
+        <details>
+            <summary data-type="solution">Solution</summary>
+            <div class="spoiler-content">
+            To be added.
+                </div>
+        </details>
+        <details>
+            <summary data-type="code">Code (C++)</summary>
+            <pre class="spoiler-code"><code class="cpp"><script type="text/plain">Code
+            </script></code></pre>
+        </details>
+    </div>
+    </li>
+    <li>
+    <a href="https://codeforces.com/contest/2121/problem/F" target="_blank">Codeforces - Yamakasi</a>
+    <button class="solution-toggle-btn" onclick="toggleSolution(this)">Show Solution</button>
+    <div class="practice-solution-container" style="display: none;">
+        <details>
+            <summary data-type="solution">Solution</summary>
+            <div class="spoiler-content">
+            To be added.
+                </div>
+        </details>
+        <details>
+            <summary data-type="code">Code (C++)</summary>
+            <pre class="spoiler-code"><code class="cpp"><script type="text/plain">Code
+            </script></code></pre>
+        </details>
+    </div>
+    </li>
+    <li>
+    <a href="https://codeforces.com/contest/1826/problem/D" target="_blank">Codeforces - Running Miles</a>
+    <button class="solution-toggle-btn" onclick="toggleSolution(this)">Show Solution</button>
+    <div class="practice-solution-container" style="display: none;">
+        <details>
+            <summary data-type="solution">Solution</summary>
+            <div class="spoiler-content">
+            To be added.
+                </div>
+        </details>
+        <details>
+            <summary data-type="code">Code (C++)</summary>
+            <pre class="spoiler-code"><code class="cpp"><script type="text/plain">Code
+            </script></code></pre>
+        </details>
+    </div>
+    </li>
+    <li>
+    <a href="https://codeforces.com/contest/612/problem/D" target="_blank">Codeforces - The Union of k-Segments</a>
+    <button class="solution-toggle-btn" onclick="toggleSolution(this)">Show Solution</button>
+    <div class="practice-solution-container" style="display: none;">
+        <details>
+            <summary data-type="solution">Solution</summary>
+            <div class="spoiler-content">
+            To be added.
+                </div>
+        </details>
+        <details>
+            <summary data-type="code">Code (C++)</summary>
+            <pre class="spoiler-code"><code class="cpp"><script type="text/plain">Code
+            </script></code></pre>
+        </details>
+    </div>
+    </li>
+    <li>
+    <a href="https://codeforces.com/problemset/problem/689/E" target="_blank">Codeforces - Mike and Geometry Problem</a>
+    <button class="solution-toggle-btn" onclick="toggleSolution(this)">Show Solution</button>
+    <div class="practice-solution-container" style="display: none;">
+        <details>
+            <summary data-type="solution">Solution</summary>
+            <div class="spoiler-content">
+            To be added.
+                </div>
+        </details>
+        <details>
+            <summary data-type="code">Code (C++)</summary>
+            <pre class="spoiler-code"><code class="cpp"><script type="text/plain">Code
+            </script></code></pre>
+        </details>
+    </div>
+    </li>
+    <li>
+    <a href="https://codeforces.com/contest/2179/problem/H" target="_blank">Codeforces - Blackslex and Plants</a>
+    <button class="solution-toggle-btn" onclick="toggleSolution(this)">Show Solution</button>
+    <div class="practice-solution-container" style="display: none;">
+        <details>
+            <summary data-type="solution">Solution</summary>
+            <div class="spoiler-content">
+            To be added.
+                </div>
+        </details>
+        <details>
+            <summary data-type="code">Code (C++)</summary>
+            <pre class="spoiler-code"><code class="cpp"><script type="text/plain">Code
+            </script></code></pre>
+        </details>
+    </div>
+    </li>
+    <li>
+    <a href="https://atcoder.jp/contests/abc438/tasks/abc438_d" target="_blank">Atcoder - Tail of Snake</a>
+    <button class="solution-toggle-btn" onclick="toggleSolution(this)">Show Solution</button>
+    <div class="practice-solution-container" style="display: none;">
+        <details>
+            <summary data-type="solution">Solution</summary>
+            <div class="spoiler-content">
+            To be added.
+                </div>
+        </details>
+        <details>
+            <summary data-type="code">Code (C++)</summary>
+            <pre class="spoiler-code"><code class="cpp"><script type="text/plain">Code
+            </script></code></pre>
+        </details>
+    </div>
+    </li>
+    <li>
+    <a href="https://atcoder.jp/contests/abc356/tasks/abc356_e" target="_blank">Atcoder - Max/Min</a>
+    <button class="solution-toggle-btn" onclick="toggleSolution(this)">Show Solution</button>
+    <div class="practice-solution-container" style="display: none;">
+        <details>
+            <summary data-type="solution">Solution</summary>
+            <div class="spoiler-content">
+            To be added.
+                </div>
+        </details>
+        <details>
+            <summary data-type="code">Code (C++)</summary>
+            <pre class="spoiler-code"><code class="cpp"><script type="text/plain">Code
+            </script></code></pre>
+        </details>
+    </div>
+    </li>
+    <li>
+    <a href="https://atcoder.jp/contests/abc158/tasks/abc158_e" target="_blank">Atcoder - Divisible Substring</a>
+    <button class="solution-toggle-btn" onclick="toggleSolution(this)">Show Solution</button>
+    <div class="practice-solution-container" style="display: none;">
+        <details>
+            <summary data-type="solution">Solution</summary>
+            <div class="spoiler-content">
+            To be added.
+                </div>
+        </details>
+        <details>
+            <summary data-type="code">Code (C++)</summary>
+            <pre class="spoiler-code"><code class="cpp"><script type="text/plain">Code
+            </script></code></pre>
+        </details>
+    </div>
+    </li>
+    <li>
+    <a href="https://codeforces.com/problemset/problem/835/C" target="_blank">Codeforces - Star Sky</a>
+    <button class="solution-toggle-btn" onclick="toggleSolution(this)">Show Solution</button>
+    <div class="practice-solution-container" style="display: none;">
+        <details>
+            <summary data-type="solution">Solution</summary>
+            <div class="spoiler-content">
+            To be added.
+                </div>
+        </details>
+        <details>
+            <summary data-type="code">Code (C++)</summary>
+            <pre class="spoiler-code"><code class="cpp"><script type="text/plain">Code
+            </script></code></pre>
+        </details>
+    </div>
+    </li>
+    <li>
+    <a href="https://atcoder.jp/contests/abc410/tasks/abc410_f" target="_blank">Atcoder - Balanced Rectangles</a>
+    <button class="solution-toggle-btn" onclick="toggleSolution(this)">Show Solution</button>
+    <div class="practice-solution-container" style="display: none;">
+        <details>
+            <summary data-type="solution">Solution</summary>
+            <div class="spoiler-content">
+            To be added.
+                </div>
+        </details>
+        <details>
+            <summary data-type="code">Code (C++)</summary>
+            <pre class="spoiler-code"><code class="cpp"><script type="text/plain">Code
+            </script></code></pre>
+        </details>
+    </div>
+    </li>
+    <li>
+    <a href="https://www.codechef.com/problems/CENS20A" target="_blank">CodeChef - Cherry and Bits</a>
+    <button class="solution-toggle-btn" onclick="toggleSolution(this)">Show Solution</button>
+    <div class="practice-solution-container" style="display: none;">
+        <details>
+            <summary data-type="solution">Solution</summary>
+            <div class="spoiler-content">
+            To be added.
+                </div>
+        </details>
+        <details>
+            <summary data-type="code">Code (C++)</summary>
+            <pre class="spoiler-code"><code class="cpp"><script type="text/plain">Code
+            </script></code></pre>
+        </details>
+    </div>
+    </li>
 </ul>
