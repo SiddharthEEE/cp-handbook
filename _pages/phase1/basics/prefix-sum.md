@@ -100,6 +100,7 @@ To count the number of pairs $(l,r)$ satisfying this, we can iterate on $r$ from
 
 <details>
 <summary data-type="code">Code (C++)</summary>
+
 <pre class="spoiler-code"><code class="cpp"><script type="text/plain">#include <bits/stdc++.h>
 #define int long long int
 #define endl "\n"
@@ -108,7 +109,7 @@ To count the number of pairs $(l,r)$ satisfying this, we can iterate on $r$ from
 using namespace std;
 
 signed main() {
-fastio()
+    fastio()
 
     int n, x;
     cin >> n >> x;
@@ -132,7 +133,6 @@ fastio()
     cout << ans << endl;
 
     return 0;
-
 }
 </script></code></pre>
 
@@ -821,7 +821,7 @@ $$
 where $\displaystyle \text{sum}_j = \sum_{\substack{l=1 \\ \text{pre}_{l-1} = j}}^il$, which can be computed by iterating on $l$ from $1$ to $i$.<br><br>
 
 Also, $-n \le \text{pre}_k \le n \left(\because \left|b_k\right| \leq 1\right)$ implies that we need to compute $\text{sum}_j$ for $-n \le j \le n$. To avoid using a map, we can do the following modification to the expression of the inner summation:
-$$=\sum_{r=i}^nr\cdot\text{sum}_{\text{pre}_r+n}$$
+$$\sum_{r=i}^nr\cdot\text{sum}_{\text{pre}_r+n}$$
 
 where $\displaystyle \text{sum}_j = \sum_{\substack{l=1 \\ \text{pre}_{l-1}+n = j}}^il$. Thus, we need to compute $\text{sum}_j$ for $0 \le j \le 2\cdot n$ which can be stored in an array.<br><br>
 
@@ -925,7 +925,7 @@ For each test case, print the value of the given expression modulo $998244353$.<
 <summary data-type="solution">Solution</summary>
 <div class="spoiler-content">
 <span style="color:red;"><i><b>NOTE:</b></i></span>
-<i>This solution involves the concept of <b>Changing the Order of Summation</b>. There exists another solution to this problem which is explained in the <a href="{{ site.baseurl }}/phase1/maths/combinatorics" target="_blank">Combinatorics</a> section.</i><br><br>
+<i>This solution uses the concept of <b>Changing the Order of Summation</b>. There exists another solution to this problem which is explained in the <a href="{{ site.baseurl }}/phase1/maths/combinatorics" target="_blank">Combinatorics</a> section.</i><br><br>
 
 Build the prefix sum array $\text{pre}$ of the array $a$. Also build the prefix sum array $\text{pre2}$ of the array $\text{pre}$.<br><br>
 
@@ -1415,6 +1415,410 @@ signed main() {
 <details>
 <summary data-type="solution">Solution</summary>
 <div class="spoiler-content">
+Formally, we have to count the number of pairs $(l,r)$ such that:
+<ul>
+    <li>$1 \le l \le r \le n$</li>
+    <li>$\displaystyle \sum_{i=l}^ra_i \bmod n = 0$</li>
+</ul><br>
+
+Build the prefix sum array $\text{pre}$ of the array $a$. Now, the second condition can be written as:
+
+$$
+\begin{aligned}
+& \left(\text{pre}_r - \text{pre}_{l-1}\right) \bmod n = 0 \\[6pt]
+=\; & \text{pre}_{l-1} \bmod n = \text{pre}_r \bmod n
+\end{aligned}
+$$
+
+Replacing $l \rightarrow l+1$, we can rewrite both the conditions as:
+
+<ul>
+    <li>$0 \le l < r \le n$</li>
+    <li>$\text{pre}_l \bmod n = \text{pre}_r \bmod n$</li>
+</ul><br>
+
+To count the number of pairs $(l,r)$ satisfying this, we can iterate on $r$ from $1$ to $n$ and keep track of the frequencies of $\text{pre}_l \bmod n$ for $0 \le l < r$.<br><br>
+
+<b>Time Complexity:</b> $O(n)$
+
+</div>
+</details>
+<details>
+<summary data-type="code">Code (C++)</summary>
+
+<pre class="spoiler-code"><code class="cpp"><script type="text/plain">#include <bits/stdc++.h>
+#define int long long int
+#define endl "\n"
+#define fastio() ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(__null);
+
+using namespace std;
+
+signed main() {
+    fastio()
+
+    int n;
+    cin >> n;
+
+    int ans = 0, pre = 0;
+    vector<int> freq(n + 1);
+    freq[pre] = 1;
+
+    for (int r = 1; r <= n; r++) {
+        int x;
+        cin >> x;
+        pre = (pre + x % n + n) % n;
+        ans += freq[pre], freq[pre]++;
+    }
+
+    cout << ans << endl;
+
+    return 0;
+}
+</script></code></pre>
+
+</details>
+</div>
+</li>
+<li>
+<a href="https://codeforces.com/contest/1398/problem/C" target="_blank">Codeforces - Good Subarrays</a>
+<button class="solution-toggle-btn" onclick="toggleSolution(this)">Show Solution</button>
+<div class="practice-solution-container" style="display: none;">
+<details>
+<summary data-type="solution">Solution</summary>
+<div class="spoiler-content">
+To be added.
+</div>
+</details>
+<details>
+<summary data-type="code">Code (C++)</summary>
+
+<pre class="spoiler-code"><code class="cpp"><script type="text/plain">#include <bits/stdc++.h>
+#define int long long int
+#define endl "\n"
+#define fastio() ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(__null);
+
+using namespace std;
+
+signed main() {
+    fastio()
+
+    int t;
+    cin >> t;
+
+    while (t--) {
+        int n;
+        cin >> n;
+
+        int ans = 0, pre = n;
+        vector<int> freq(10 * n + 1);
+        freq[pre] = 1;
+
+        for (int r = 1; r <= n; r++) {
+            char c;
+            cin >> c;
+            int d = c - '0';
+            pre += d, ans += freq[pre - r];
+            freq[pre - r]++;
+        }
+
+        cout << ans << endl;
+    }
+
+    return 0;
+}
+</script></code></pre>
+</details>
+</div>
+</li>
+<li>
+<a href="https://atcoder.jp/contests/abc408/tasks/abc408_c" target="_blank">AtCoder - Not All Covered</a>
+<button class="solution-toggle-btn" onclick="toggleSolution(this)">Show Solution</button>
+<div class="practice-solution-container" style="display: none;">
+<details>
+<summary data-type="solution">Solution</summary>
+<div class="spoiler-content">
+To be added.
+</div>
+</details>
+<details>
+<summary data-type="code">Code (C++)</summary>
+
+<pre class="spoiler-code"><code class="cpp"><script type="text/plain">#include <bits/stdc++.h>
+#define int long long int
+#define endl "\n"
+#define fastio() ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(__null);
+
+using namespace std;
+
+signed main() {
+    fastio()
+
+    int n, m;
+    cin >> n >> m;
+
+    vector<int> freq(n + 2);
+    for (int i = 0; i < m; i++) {
+        int l, r;
+        cin >> l >> r;
+        freq[l]++, freq[r + 1]--;
+    }
+
+    int ans = m;
+    for (int i = 1; i <= n; i++) {
+        freq[i] += freq[i - 1];
+        ans = min(ans, freq[i]);
+    }
+
+    cout << ans << endl;
+
+    return 0;
+}
+</script></code></pre>
+</details>
+</div>
+</li>
+<li>
+<a href="https://atcoder.jp/contests/tokiomarine2020/tasks/tokiomarine2020_c" target="_blank">AtCoder - Lamps</a>
+<button class="solution-toggle-btn" onclick="toggleSolution(this)">Show Solution</button>
+<div class="practice-solution-container" style="display: none;">
+<details>
+<summary data-type="solution">Solution</summary>
+<div class="spoiler-content">
+To be added.
+</div>
+</details>
+<details>
+<summary data-type="code">Code (C++)</summary>
+
+<pre class="spoiler-code"><code class="cpp"><script type="text/plain">#include <bits/stdc++.h>
+#define int long long int
+#define endl "\n"
+#define fastio() ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(__null);
+
+using namespace std;
+
+signed main() {
+    fastio()
+
+    int n, k;
+    cin >> n >> k;
+
+    vector<int> a(n + 2);
+    for (int i = 1; i <= n; i++)
+        cin >> a[i];
+
+    for (int i = 1; i <= k; i++) {
+        vector<int> sum(n + 2);
+        for (int i = 1; i <= n; i++) {
+            int l = max(1LL, i - a[i]);
+            int r = min(n, i + a[i]);
+            sum[l]++, sum[r + 1]--;
+        }
+
+        for (int i = 1; i <= n; i++)
+            sum[i] += sum[i - 1];
+
+        if (sum == a)
+            break;
+
+        swap(a, sum);
+    }
+
+    for (int i = 1; i <= n; i++)
+        cout << a[i] << " ";
+
+    return 0;
+}
+</script></code></pre>
+</details>
+</div>
+</li>
+<li>
+<a href="https://codeforces.com/problemset/problem/1343/D" target="_blank">Codeforces - Constant Palindrome Sum</a>
+<button class="solution-toggle-btn" onclick="toggleSolution(this)">Show Solution</button>
+<div class="practice-solution-container" style="display: none;">
+<details>
+<summary data-type="solution">Solution</summary>
+<div class="spoiler-content">
+To be added.
+</div>
+</details>
+<details>
+<summary data-type="code">Code (C++)</summary>
+
+<pre class="spoiler-code"><code class="cpp"><script type="text/plain">#include <bits/stdc++.h>
+#define int long long int
+#define endl "\n"
+#define fastio() ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(__null);
+
+using namespace std;
+
+signed main() {
+    fastio()
+
+    int t;
+    cin >> t;
+
+    while (t--) {
+        int n, k;
+        cin >> n >> k;
+
+        vector<int> a(n);
+        for (auto &x : a)
+            cin >> x;
+
+        vector<int> val(2 * k + 2);
+        auto add = [&](int l, int r, int x) {
+            val[l] += x, val[r + 1] -= x;
+        };
+
+        for (int i = 0; i < n / 2; i++) {
+            int x = a[i], y = a[n - 1 - i];
+            if (x > y) swap(x, y);
+
+            int m1 = x + 1, m2 = x + y, m3 = y + k;
+            add(m1, m2 - 1, 1), add(m2 + 1, m3, 1);
+            add(2, m1 - 1, 2), add(m3 + 1, 2 * k, 2);
+        }
+
+        int ans = 2 * n;
+        for (int i = 2; i <= 2 * k; i++) {
+            val[i] += val[i - 1];
+            ans = min(ans, val[i]);
+        }
+
+        cout << ans << endl;
+    }
+
+    return 0;
+}
+</script></code></pre>
+</details>
+</div>
+</li>
+<li>
+<a href="https://codeforces.com/contest/295/problem/A" target="_blank">Codeforces - Greg and Array</a>
+<button class="solution-toggle-btn" onclick="toggleSolution(this)">Show Solution</button>
+<div class="practice-solution-container" style="display: none;">
+<details>
+<summary data-type="solution">Solution</summary>
+<div class="spoiler-content">
+To be added.
+</div>
+</details>
+<details>
+<summary data-type="code">Code (C++)</summary>
+
+<pre class="spoiler-code"><code class="cpp"><script type="text/plain">#include <bits/stdc++.h>
+#define int long long int
+#define endl "\n"
+#define fastio() ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(__null);
+
+using namespace std;
+
+signed main() {
+    fastio()
+
+    int n, m, k;
+    cin >> n >> m >> k;
+
+    vector<int> a(n + 1);
+    for (int i = 1; i <= n; i++)
+        cin >> a[i];
+
+    vector<array<int, 3>> op(m + 1);
+    for (int i = 1; i <= m; i++)
+        cin >> op[i][0] >> op[i][1] >> op[i][2];
+
+    vector<int> freq(m + 2);
+    for (int i = 1; i <= k; i++) {
+        int x, y;
+        cin >> x >> y;
+        freq[x]++, freq[y + 1]--;
+    }
+
+    vector<int> sum(n + 2);
+    for (int i = 1; i <= m; i++) {
+        freq[i] += freq[i - 1];
+        auto &[l, r, d] = op[i];
+        sum[l] += d * freq[i], sum[r + 1] -= d * freq[i];
+    }
+
+    for (int i = 1; i <= n; i++) {
+        sum[i] += sum[i - 1];
+        cout << a[i] + sum[i] << " ";
+    }
+
+    return 0;
+}
+</script></code></pre>
+</details>
+</div>
+</li>
+<li>
+<a href="https://codeforces.com/contest/276/problem/C" target="_blank">Codeforces - Little Girl and Maximum Sum</a>
+<button class="solution-toggle-btn" onclick="toggleSolution(this)">Show Solution</button>
+<div class="practice-solution-container" style="display: none;">
+<details>
+<summary data-type="solution">Solution</summary>
+<div class="spoiler-content">
+To be added.
+</div>
+</details>
+<details>
+<summary data-type="code">Code (C++)</summary>
+
+<pre class="spoiler-code"><code class="cpp"><script type="text/plain">#include <bits/stdc++.h>
+#define int long long int
+#define endl "\n"
+#define fastio() ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(__null);
+
+using namespace std;
+
+signed main() {
+    fastio()
+
+    int n, q;
+    cin >> n >> q;
+
+    vector<int> a(n + 1);
+    for (int i = 1; i <= n; i++)
+        cin >> a[i];
+
+    vector<int> freq(n + 2);
+    for (int i = 1; i <= q; i++) {
+        int l, r;
+        cin >> l >> r;
+        freq[l]++, freq[r + 1]--;
+    }
+
+    vector<int> all = {0};
+    for (int i = 1; i <= n; i++) {
+        freq[i] += freq[i - 1];
+        all.push_back(freq[i]);
+    }
+
+    sort(a.begin(), a.end());
+    sort(all.begin(), all.end());
+
+    int ans = 0;
+    for (int i = 1; i <= n; i++)
+        ans += a[i] * all[i];
+    cout << ans << endl;
+
+    return 0;
+}
+</script></code></pre>
+</details>
+</div>
+</li>
+<li>
+<a href="https://codeforces.com/problemset/problem/466/C" target="_blank">Codeforces - Number of Ways</a>
+<button class="solution-toggle-btn" onclick="toggleSolution(this)">Show Solution</button>
+<div class="practice-solution-container" style="display: none;">
+<details>
+<summary data-type="solution">Solution</summary>
+<div class="spoiler-content">
 To be added.
 </div>
 </details>
@@ -1437,143 +1841,20 @@ signed main() {
     vector<int> pre(n + 1);
     for (int i = 1; i <= n; i++) {
         cin >> pre[i];
-        pre[i] = (pre[i - 1] + pre[i] % n + n) % n;
+        pre[i] += pre[i - 1];
     }
 
-    vector<int> freq(n + 1);
-    freq[pre[0]] = 1;
-
-    int ans = 0;
-    for (int r = 1; r <= n; r++) {
-        ans += freq[pre[r]];
-        freq[pre[r]]++;
+    int ans = 0, freq = 0;
+    for (int r = 1; r < n; r++) {
+        if (3 * pre[r] == 2 * pre[n] && pre[n] % 3 == 0)
+            ans += freq;
+        freq += (3 * pre[r] == pre[n]);
     }
 
     cout << ans << endl;
 
     return 0;
-
 }
-</script></code></pre>
-
-</details>
-</div>
-</li>
-<li>
-<a href="https://codeforces.com/contest/1398/problem/C" target="_blank">Codeforces - Good Subarrays</a>
-<button class="solution-toggle-btn" onclick="toggleSolution(this)">Show Solution</button>
-<div class="practice-solution-container" style="display: none;">
-<details>
-<summary data-type="solution">Solution</summary>
-<div class="spoiler-content">
-To be added.
-</div>
-</details>
-<details>
-<summary data-type="code">Code (C++)</summary>
-<pre class="spoiler-code"><code class="cpp"><script type="text/plain">Code
-</script></code></pre>
-</details>
-</div>
-</li>
-<li>
-<a href="https://atcoder.jp/contests/abc408/tasks/abc408_c" target="_blank">AtCoder - Not All Covered</a>
-<button class="solution-toggle-btn" onclick="toggleSolution(this)">Show Solution</button>
-<div class="practice-solution-container" style="display: none;">
-<details>
-<summary data-type="solution">Solution</summary>
-<div class="spoiler-content">
-To be added.
-</div>
-</details>
-<details>
-<summary data-type="code">Code (C++)</summary>
-<pre class="spoiler-code"><code class="cpp"><script type="text/plain">Code
-</script></code></pre>
-</details>
-</div>
-</li>
-<li>
-<a href="https://atcoder.jp/contests/tokiomarine2020/tasks/tokiomarine2020_c" target="_blank">AtCoder - Lamps</a>
-<button class="solution-toggle-btn" onclick="toggleSolution(this)">Show Solution</button>
-<div class="practice-solution-container" style="display: none;">
-<details>
-<summary data-type="solution">Solution</summary>
-<div class="spoiler-content">
-To be added.
-</div>
-</details>
-<details>
-<summary data-type="code">Code (C++)</summary>
-<pre class="spoiler-code"><code class="cpp"><script type="text/plain">Code
-</script></code></pre>
-</details>
-</div>
-</li>
-<li>
-<a href="https://codeforces.com/problemset/problem/1343/D" target="_blank">Codeforces - Constant Palindrome Sum</a>
-<button class="solution-toggle-btn" onclick="toggleSolution(this)">Show Solution</button>
-<div class="practice-solution-container" style="display: none;">
-<details>
-<summary data-type="solution">Solution</summary>
-<div class="spoiler-content">
-To be added.
-</div>
-</details>
-<details>
-<summary data-type="code">Code (C++)</summary>
-<pre class="spoiler-code"><code class="cpp"><script type="text/plain">Code
-</script></code></pre>
-</details>
-</div>
-</li>
-<li>
-<a href="https://codeforces.com/contest/295/problem/A" target="_blank">Codeforces - Greg and Array</a>
-<button class="solution-toggle-btn" onclick="toggleSolution(this)">Show Solution</button>
-<div class="practice-solution-container" style="display: none;">
-<details>
-<summary data-type="solution">Solution</summary>
-<div class="spoiler-content">
-To be added.
-</div>
-</details>
-<details>
-<summary data-type="code">Code (C++)</summary>
-<pre class="spoiler-code"><code class="cpp"><script type="text/plain">Code
-</script></code></pre>
-</details>
-</div>
-</li>
-<li>
-<a href="https://codeforces.com/contest/276/problem/C" target="_blank">Codeforces - Little Girl and Maximum Sum</a>
-<button class="solution-toggle-btn" onclick="toggleSolution(this)">Show Solution</button>
-<div class="practice-solution-container" style="display: none;">
-<details>
-<summary data-type="solution">Solution</summary>
-<div class="spoiler-content">
-To be added.
-</div>
-</details>
-<details>
-<summary data-type="code">Code (C++)</summary>
-<pre class="spoiler-code"><code class="cpp"><script type="text/plain">Code
-</script></code></pre>
-</details>
-</div>
-</li>
-<li>
-<a href="https://codeforces.com/problemset/problem/466/C" target="_blank">Codeforces - Number of Ways</a>
-<button class="solution-toggle-btn" onclick="toggleSolution(this)">Show Solution</button>
-<div class="practice-solution-container" style="display: none;">
-<details>
-<summary data-type="solution">Solution</summary>
-<div class="spoiler-content">
-To be added.
-</div>
-</details>
-<details>
-<summary data-type="code">Code (C++)</summary>
-<pre class="spoiler-code"><code class="cpp"><script type="text/plain">Code
 </script></code></pre>
 </details>
 </div>
@@ -1590,7 +1871,53 @@ To be added.
 </details>
 <details>
 <summary data-type="code">Code (C++)</summary>
-<pre class="spoiler-code"><code class="cpp"><script type="text/plain">Code
+
+<pre class="spoiler-code"><code class="cpp"><script type="text/plain">#include <bits/stdc++.h>
+#define int long long int
+#define endl "\n"
+#define fastio() ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(__null);
+
+using namespace std;
+
+signed main() {
+    fastio()
+
+    int t;
+    cin >> t;
+
+    while (t--) {
+        int n;
+        cin >> n;
+
+        int ans = 0;
+        vector<int> left(n), right(n);
+        for (int i = 0; i < n; i++) {
+            int cur = 0;
+            vector<int> nleft(n), nright(n);
+            for (int j = 0; j < n; j++) {
+                char c;
+                cin >> c;
+
+                nleft[max(j - 1, 0LL)] ^= left[j];
+                nright[min(j + 1, n - 1)] ^= right[j];
+
+                cur ^= left[j];
+                if (cur ^ (c == '1')) {
+                    nleft[max(j - 1, 0LL)] ^= 1LL;
+                    nright[min(j + 1, n - 1)] ^= 1LL;
+                    ans++;
+                }
+                cur ^= right[j];
+            }
+
+            swap(left, nleft), swap(right, nright);
+        }
+
+        cout << ans << endl;
+    }
+
+    return 0;
+}
 </script></code></pre>
 </details>
 </div>
@@ -1607,7 +1934,50 @@ To be added.
 </details>
 <details>
 <summary data-type="code">Code (C++)</summary>
-<pre class="spoiler-code"><code class="cpp"><script type="text/plain">Code
+
+<pre class="spoiler-code"><code class="cpp"><script type="text/plain">#include <bits/stdc++.h>
+#define int long long int
+#define endl "\n"
+#define fastio() ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(__null);
+
+using namespace std;
+
+signed main() {
+    fastio()
+
+    int t;
+    cin >> t;
+
+    while (t--) {
+        int n;
+        cin >> n;
+
+        vector<int> a(n + 1);
+        for (int i = 1; i <= n; i++)
+            cin >> a[i];
+
+        int bad = 0;
+        for (int med = 1; med <= 10; med++) {
+            int j = 0;
+            vector<int> pre(n + 1, n), freq(2 * n + 1);
+            for (int i = 1; i <= n; i++) {
+                if (a[i] == med) {
+                    while (j < i) {
+                        freq[pre[j]]++;
+                        j++;
+                    }
+                }
+
+                pre[i] = pre[i - 1] + (a[i] >= med ? 1 : -1);
+                bad += freq[pre[i]];
+            }
+        }
+
+        cout << (n * (n + 1)) / 2 - bad << endl;
+    }
+
+    return 0;
+}
 </script></code></pre>
 </details>
 </div>
@@ -1624,7 +1994,48 @@ To be added.
 </details>
 <details>
 <summary data-type="code">Code (C++)</summary>
-<pre class="spoiler-code"><code class="cpp"><script type="text/plain">Code
+
+<pre class="spoiler-code"><code class="cpp"><script type="text/plain">#include <bits/stdc++.h>
+#define int long long int
+#define endl "\n"
+#define fastio() ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(__null);
+
+using namespace std;
+
+signed main() {
+    fastio()
+
+    int t;
+    cin >> t;
+
+    while (t--) {
+        int n, s, x;
+        cin >> n >> s >> x;
+
+        vector<int> a(n + 1);
+        for (int i = 1; i <= n; i++)
+            cin >> a[i];
+
+        auto solve = [&](int mx) {
+            map<int, int> mp;
+            int ans = 0, pre = 0;
+            for (int i = 1; i <= n; i++) {
+                if (a[i] <= mx) {
+                    mp[pre]++, pre += a[i];
+                    if (mp.find(pre - s) != mp.end())
+                        ans += mp[pre - s];
+                }
+                else mp.clear();
+            }
+
+            return ans;
+        };
+
+        cout << solve(x) - solve(x - 1) << endl;
+    }
+
+    return 0;
+}
 </script></code></pre>
 </details>
 </div>
@@ -1641,7 +2052,43 @@ To be added.
 </details>
 <details>
 <summary data-type="code">Code (C++)</summary>
-<pre class="spoiler-code"><code class="cpp"><script type="text/plain">Code
+
+<pre class="spoiler-code"><code class="cpp"><script type="text/plain">#include <bits/stdc++.h>
+#define int long long int
+#define endl "\n"
+#define fastio() ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(__null);
+
+using namespace std;
+
+signed main() {
+    fastio()
+
+    int t;
+    cin >> t;
+
+    while (t--) {
+        int n;
+        cin >> n;
+
+        vector<int> b(n + 1), pre(n + 1), suf(n + 1);
+        for (int i = 1; i <= n; i++) {
+            cin >> b[i];
+            pre[i] = b[i] + i, suf[i] = b[i] - i;
+        }
+
+        for (int i = 2; i <= n; i++)
+            pre[i] = max(pre[i], pre[i - 1]);
+        for (int i = n - 1; i >= 0; i--)
+            suf[i] = max(suf[i], suf[i + 1]);
+
+        int ans = 0;
+        for (int i = 2; i < n; i++)
+            ans = max(ans, b[i] + pre[i - 1] + suf[i + 1]);
+        cout << ans << endl;
+    }
+
+    return 0;
+}
 </script></code></pre>
 </details>
 </div>
@@ -1658,7 +2105,58 @@ To be added.
 </details>
 <details>
 <summary data-type="code">Code (C++)</summary>
-<pre class="spoiler-code"><code class="cpp"><script type="text/plain">Code
+
+<pre class="spoiler-code"><code class="cpp"><script type="text/plain">#include <bits/stdc++.h>
+#define int long long int
+#define endl "\n"
+#define fastio() ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(__null);
+
+using namespace std;
+
+signed main() {
+    fastio()
+
+    int n, k;
+    cin >> n >> k;
+
+    vector<int> all;
+    vector<array<int, 2>> v(n);
+    for (auto &[l, r] : v) {
+        cin >> l >> r;
+        all.push_back(l), all.push_back(r);
+    }
+
+    sort(all.begin(), all.end());
+    all.erase(unique(all.begin(), all.end()), all.end());
+
+    int m = size(all);
+    vector<int> freq(m + 1), freq2(m + 1);
+    for (auto [l, r] : v) {
+        l = lower_bound(all.begin(), all.end(), l) - all.begin();
+        r = lower_bound(all.begin(), all.end(), r) - all.begin();
+        freq[l]++, freq[r + 1]--;
+        freq2[l]++, freq2[r]--;
+    }
+
+    for (int i = 1; i < m; i++) {
+        freq[i] += freq[i - 1];
+        freq2[i] += freq2[i - 1];
+    }
+
+    vector<array<int, 2>> ans;
+    for (int i = 0; i < m; i++) {
+        if (i && freq2[i - 1] >= k)
+            ans.back()[1] = all[i];
+        else if (freq[i] >= k)
+            ans.push_back({all[i], all[i]});
+    }
+
+    cout << size(ans) << endl;
+    for (auto &[l, r] : ans)
+        cout << l << " " << r << endl;
+
+    return 0;
+}
 </script></code></pre>
 </details>
 </div>
@@ -1675,7 +2173,83 @@ To be added.
 </details>
 <details>
 <summary data-type="code">Code (C++)</summary>
-<pre class="spoiler-code"><code class="cpp"><script type="text/plain">Code
+
+<pre class="spoiler-code"><code class="cpp"><script type="text/plain">#include <bits/stdc++.h>
+#define int long long int
+#define endl "\n"
+#define fastio() ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(__null);
+
+using namespace std;
+
+const int N = (int)2e5;
+const int mod = (int)1e9 + 7;
+
+int mexp(int a, int n) {
+    int res = 1;
+    while (n) {
+        if (n & 1LL) res = (res * a) % mod;
+        a = (a * a) % mod, n >>= 1LL;
+    }
+    return res;
+}
+
+signed main() {
+    fastio()
+
+    vector<int> fact(N + 1, 1);
+    for (int i = 1; i <= N; i++)
+        fact[i] = fact[i - 1] * i % mod;
+
+    vector<int> inv(N + 1);
+    inv[N] = mexp(fact[N], mod - 2);
+    for (int i = N - 1; i >= 0; i--)
+        inv[i] = inv[i + 1] * (i + 1) % mod;
+
+    auto nCr = [&](int n, int r) {
+        return fact[n] * inv[r] % mod * inv[n - r] % mod;
+    };
+
+    int n, k;
+    cin >> n >> k;
+
+    vector<int> all;
+    vector<array<int, 2>> v(n);
+    for (auto &[l, r] : v) {
+        cin >> l >> r;
+        all.push_back(l), all.push_back(r);
+    }
+
+    sort(all.begin(), all.end());
+    all.erase(unique(all.begin(), all.end()), all.end());
+
+    int m = size(all);
+    vector<int> freq(m + 1), freq2(m + 1);
+    for (auto [l, r] : v) {
+        l = lower_bound(all.begin(), all.end(), l) - all.begin();
+        r = lower_bound(all.begin(), all.end(), r) - all.begin();
+        freq[l]++, freq[r + 1]--;
+        freq2[l]++, freq2[r]--;
+    }
+
+    for (int i = 1; i < m; i++) {
+        freq[i] += freq[i - 1];
+        freq2[i] += freq2[i - 1];
+    }
+
+    vector<int> cnt(n + 1);
+    for (int i = 0; i < m; i++) {
+        cnt[freq[i]]++;
+        if (i + 1 < m)
+            cnt[freq2[i]] += (all[i + 1] - all[i] - 1);
+    }
+
+    int ans = 0;
+    for (int i = k; i <= n; i++)
+        ans = (ans + nCr(i, k) * cnt[i]) % mod;
+    cout << ans << endl;
+
+    return 0;
+}
 </script></code></pre>
 </details>
 </div>
@@ -1692,7 +2266,66 @@ To be added.
 </details>
 <details>
 <summary data-type="code">Code (C++)</summary>
-<pre class="spoiler-code"><code class="cpp"><script type="text/plain">Code
+
+<pre class="spoiler-code"><code class="cpp"><script type="text/plain">#include <bits/stdc++.h>
+#define int long long int
+#define endl "\n"
+#define fastio() ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(__null);
+
+using namespace std;
+
+signed main() {
+    fastio()
+
+    int t;
+    cin >> t;
+
+    while (t--) {
+        int n, q;
+        cin >> n >> q;
+
+        int f = log2(n);
+        vector cnt(f + 1, vector<int>(n + 1));
+        vector sum(f + 1, vector<int>(n + 1));
+        for (int i = 0; i < q; i++) {
+            int l, r;
+            cin >> l >> r;
+
+            for (int k = 0; k <= f; k++) {
+                int a = l - 1 + (1 << k);
+                int d = (1 << (k + 1));
+
+                int m1 = (l < a ? 0 : (l - a) / d + ((l - a) % d != 0));
+                int m2 = (r < a ? -1 : (r - a) / d);
+                if (m1 > m2) continue;
+
+                int st = a + m1 * d;
+                int end = a + m2 * d;
+                cnt[k][st]++, sum[k][st] += l;
+                if (end + d <= n)
+                    cnt[k][end + d]--, sum[k][end + d] -= l;
+            }
+        }
+
+        for (int k = 0; k <= f; k++) {
+            int d = (1 << (k + 1));
+            for (int i = d; i <= n; i++) {
+                cnt[k][i] += cnt[k][i - d];
+                sum[k][i] += sum[k][i - d];
+            }
+        }
+
+        for (int i = 1; i <= n; i++) {
+            int ans = 0;
+            for (int k = 0; k <= f; k++)
+                ans += ((1 << k) * ((i + 1) * cnt[k][i] - sum[k][i]));
+            cout << ans << " ";
+        }
+        cout << endl;
+    }
+
+    return 0;
+}
 </script></code></pre>
 </details>
 </div>
@@ -1709,7 +2342,44 @@ To be added.
 </details>
 <details>
 <summary data-type="code">Code (C++)</summary>
-<pre class="spoiler-code"><code class="cpp"><script type="text/plain">Code
+
+<pre class="spoiler-code"><code class="cpp"><script type="text/plain">#include <bits/stdc++.h>
+#define int long long int
+#define endl "\n"
+#define fastio() ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(__null);
+
+using namespace std;
+
+signed main() {
+    fastio()
+
+    int n;
+    cin >> n;
+
+    vector<int> p1(n + 1), p2(n + 1), p3(n + 1);
+    for (int i = 1; i <= n; i++) {
+        cin >> p1[i];
+        p1[i] += p1[i - 1];
+    }
+    for (int i = 1; i <= n; i++) {
+        cin >> p2[i];
+        p2[i] += p2[i - 1];
+    }
+    for (int i = 1; i <= n; i++) {
+        cin >> p3[i];
+        p3[i] += p3[i - 1];
+    }
+
+    int ans = 0, mx = p1[1] - p2[1];
+    for (int i = 2; i < n; i++) {
+        ans = max(ans, p3[n] + (p2[i] - p3[i]) + mx);
+        mx = max(mx, p1[i] - p2[i]);
+    }
+
+    cout << ans << endl;
+
+    return 0;
+}
 </script></code></pre>
 </details>
 </div>
@@ -1726,7 +2396,47 @@ To be added.
 </details>
 <details>
 <summary data-type="code">Code (C++)</summary>
-<pre class="spoiler-code"><code class="cpp"><script type="text/plain">Code
+
+<pre class="spoiler-code"><code class="cpp"><script type="text/plain">#include <bits/stdc++.h>
+#define int long long int
+#define endl "\n"
+#define fastio() ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(__null);
+
+using namespace std;
+
+const int N = (int)1e6;
+
+signed main() {
+    fastio()
+
+    int n;
+    cin >> n;
+
+    vector<int> pre(N + 1);
+    for (int i = 1; i <= n; i++) {
+        int x;
+        cin >> x;
+        pre[x]++;
+    }
+
+    for (int i = 1; i <= N; i++)
+        pre[i] += pre[i - 1];
+
+    int ans = 0;
+    for (int d = 1; d <= N; d++) {
+        int cur = pre[d] - pre[d - 1];
+        for (int val = 1; val <= N / d; val++) {
+            int l = max(d + 1, val * d), r = min(N, (val + 1) * d - 1);
+            int cnt = pre[r] - pre[l - 1];
+            ans += val * cur * cnt;
+        }
+        ans += (cur * (cur - 1)) / 2;
+    }
+
+    cout << ans << endl;
+
+    return 0;
+}
 </script></code></pre>
 </details>
 </div>
@@ -1743,7 +2453,53 @@ To be added.
 </details>
 <details>
 <summary data-type="code">Code (C++)</summary>
-<pre class="spoiler-code"><code class="cpp"><script type="text/plain">Code
+
+<pre class="spoiler-code"><code class="cpp"><script type="text/plain">#include <bits/stdc++.h>
+#define int long long int
+#define endl "\n"
+#define fastio() ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(__null);
+
+using namespace std;
+
+signed main() {
+    fastio()
+
+    int n, p;
+    cin >> n >> p;
+
+    string s;
+    cin >> s;
+
+    if (p == 2 || p == 5) {
+        int ans = 0;
+        for (int i = 0; i < n; i++) {
+            int d = s[i] - '0';
+            if (p == 2 && d % 2 == 0)
+                ans += i + 1;
+            if (p == 5 && (d == 0 || d == 5))
+                ans += i + 1;
+        }
+
+        cout << ans << endl;
+    }
+
+    else {
+        vector<int> freq(p);
+        freq[0] = 1;
+
+        int ans = 0, suf = 0, pw = 1;
+        for (int i = n - 1; i >= 0; i--) {
+            int d = s[i] - '0';
+            suf = (suf + pw * d) % p;
+            ans += freq[suf];
+            freq[suf]++, pw = (pw * 10) % p;
+        }
+
+        cout << ans << endl;
+    }
+
+    return 0;
+}
 </script></code></pre>
 </details>
 </div>
@@ -1760,7 +2516,47 @@ To be added.
 </details>
 <details>
 <summary data-type="code">Code (C++)</summary>
-<pre class="spoiler-code"><code class="cpp"><script type="text/plain">Code
+
+<pre class="spoiler-code"><code class="cpp"><script type="text/plain">#include <bits/stdc++.h>
+#define int long long int
+#define endl "\n"
+#define fastio() ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(__null);
+
+using namespace std;
+
+const int N = 100;
+
+signed main() {
+    fastio()
+
+    int n, q, c;
+    cin >> n >> q >> c;
+
+    vector pre(c + 1, vector(N + 1, vector<int>(N + 1)));
+    for (int i = 1; i <= n; i++) {
+        int x, y, s;
+        cin >> x >> y >> s;
+        for (int t = 0; t <= c; t++)
+            pre[t][x][y] += (s + t) % (c + 1);
+    }
+
+    for (int t = 0; t <= c; t++)
+        for (int i = 1; i <= N; i++)
+            for (int j = 1; j <= N; j++)
+                pre[t][i][j] += pre[t][i - 1][j] + pre[t][i][j - 1] - pre[t][i - 1][j - 1];
+
+    auto query = [&](int t, int x1, int y1, int x2, int y2) {
+        return pre[t][x2][y2] - pre[t][x1 - 1][y2] - pre[t][x2][y1 - 1] + pre[t][x1 - 1][y1 - 1];
+    };
+
+    for (int i = 1; i <= q; i++) {
+        int t, x1, y1, x2, y2;
+        cin >> t >> x1 >> y1 >> x2 >> y2;
+        cout << query(t % (c + 1), x1, y1, x2, y2) << endl;
+    }
+
+    return 0;
+}
 </script></code></pre>
 </details>
 </div>
@@ -1777,7 +2573,64 @@ To be added.
 </details>
 <details>
 <summary data-type="code">Code (C++)</summary>
-<pre class="spoiler-code"><code class="cpp"><script type="text/plain">Code
+
+<pre class="spoiler-code"><code class="cpp"><script type="text/plain">#include <bits/stdc++.h>
+#define int long long int
+#define endl "\n"
+#define fastio() ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(__null);
+
+using namespace std;
+
+signed main() {
+    fastio()
+
+    int t;
+    cin >> t;
+
+    while (t--) {
+        int n, m;
+        cin >> n >> m;
+
+        vector a(n, vector<char>(m));
+        for (int i = 0; i < n; i++)
+            for (int j = 0; j < m; j++)
+                cin >> a[i][j];
+
+        auto transpose = [&]() {
+            vector tr(m, vector<char>(n));
+            for (int i = 0; i < n; i++)
+                for (int j = 0; j < m; j++)
+                    tr[j][i] = a[i][j];
+            swap(a, tr), swap(n, m);
+        };
+
+        if (n > m) transpose();
+
+        int ans = 0;
+        vector<int> freq(2 * n * m + 1);
+        for (int i = 0; i < n; i++) {
+            vector<int> sum(m);
+            for (int j = i; j < n; j++) {
+                int pre = n * m;
+                freq[pre] = 1;
+
+                for (int k = 0; k < m; k++) {
+                    sum[k] += (a[j][k] == '.' ? 1 : -1);
+                    pre += sum[k], ans += freq[pre];
+                    freq[pre]++;
+                }
+
+                pre = n * m;
+                for (int k = 0; k < m; k++)
+                    pre += sum[k], freq[pre]--;
+            }
+        }
+
+        cout << ans << endl;
+    }
+
+    return 0;
+}
 </script></code></pre>
 </details>
 </div>
@@ -1794,10 +2647,55 @@ To be added.
 </details>
 <details>
 <summary data-type="code">Code (C++)</summary>
-<pre class="spoiler-code"><code class="cpp"><script type="text/plain">Code
+
+<pre class="spoiler-code"><code class="cpp"><script type="text/plain">#include <bits/stdc++.h>
+#define int long long int
+#define endl "\n"
+#define fastio() ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(__null);
+
+using namespace std;
+
+signed main() {
+    fastio()
+
+    int n, m;
+    cin >> n >> m;
+
+    vector a(n + 1, vector<int>(m + 1));
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= m; j++) {
+            char c;
+            cin >> c;
+            a[i][j] = (c == '1');
+        }
+    }
+
+    int q;
+    cin >> q;
+
+    vector pre(n + 2, vector<int>(m + 2));
+    while (q--) {
+        int x1, y1, x2, y2;
+        cin >> x1 >> y1 >> x2 >> y2;
+
+        pre[x1][y1] ^= 1;
+        pre[x1][y2 + 1] ^= 1;
+        pre[x2 + 1][y1] ^= 1;
+        pre[x2 + 1][y2 + 1] ^= 1;
+    }
+
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= m; j++) {
+            pre[i][j] ^= pre[i - 1][j] ^ pre[i][j - 1] ^ pre[i - 1][j - 1];
+            cout << (a[i][j] ^ pre[i][j]);
+        }
+        cout << endl;
+    }
+
+    return 0;
+}
 </script></code></pre>
 </details>
 </div>
 </li>
-
 </ul>
