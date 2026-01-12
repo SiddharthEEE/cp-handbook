@@ -204,6 +204,11 @@ main ul {
   padding-left: 25px;
 }
 
+main ul ul,
+details .spoiler-content ul ul {
+  list-style-type: disc;
+}
+
 main li {
   margin: 0;
   padding: 0;

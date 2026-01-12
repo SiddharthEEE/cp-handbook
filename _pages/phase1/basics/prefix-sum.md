@@ -392,16 +392,21 @@ To efficiently build the $\text{freq}$ array, follow the steps:
 
 <ul>
     <li>Initialize with all zeros.</li>
-    <li>For every interval $[l_i,r_i]$, update $\text{freq}_{l_i} \gets \text{freq}_{l_i}+1$ and $\text{freq}_{r_i+1} \gets \text{freq}_{r_i+1}-1$.</li>
-    <li>After processing all the intervals, replace $\text{freq}$ array with its prefix sum array.</li>
+    <li>For every interval $[l_i,r_i]$, update:
+        <ul>
+            <li>$\text{freq}_{l_i} \gets \text{freq}_{l_i}+1$</li>
+            <li>$\text{freq}_{r_i+1} \gets \text{freq}_{r_i+1}-1$</li>
+        </ul>
+    </li>
+    <li>After processing all the intervals, replace the $\text{freq}$ array with its prefix sum array.</li>
 </ul><br>
 
 The logic behind this technique (known as <b>Difference Array</b>):
 
 <ul>
-    <li>When we perform $\text{freq}_{l_i} \gets \text{freq}_{l_i}+1$ and later replace the array $\text{freq}$ by its prefix sum array, the frequency of all temperatures $\ge l_i$ gets increased by $1$.</li>
+    <li>When we perform $\text{freq}_{l_i} \gets \text{freq}_{l_i}+1$ and later replace the $\text{freq}$ array by its prefix sum array, the frequency of all temperatures $\ge l_i$ gets increased by $1$.</li>
     <li>However, for an interval $[l_i,r_i]$, we want to increase the frequency only for tempreatures lying in the range $[l_i,r_i]$.</li>
-    <li>To stop this increment after $r_i$, we perform $\text{freq}_{r_i+1} \gets \text{freq}_{r_i+1}-1$ and later replacing the array $\text{freq}$ by its prefix sum cancels the earlier increment for all temperatures $\ge r_i+1$.</li>
+    <li>To stop this increment after $r_i$, we perform $\text{freq}_{r_i+1} \gets \text{freq}_{r_i+1}-1$ and later replacing the $\text{freq}$ array by its prefix sum cancels the earlier increment for all temperatures $\ge r_i+1$.</li>
     <li>As a result, the net effect is that only temperatures in the range $[l_i,r_i]$ have their frequency increased by $1$, while other temperatures remain unaffected.</li>
 </ul><br>
 
@@ -544,20 +549,19 @@ Let us define:
 We can rewrite the expression for $\text{val}_i$ as:
 $$(i+1)\cdot\text{cnt}_i - \text{sum}_i$$
 
-To efficiently build the $\text{cnt}$ array, follow the steps:
+To efficiently build the $\text{cnt}$ and $\text{sum}$ arrays, follow the steps:
 
 <ul>
     <li>Initialize with all zeros.</li>
-    <li>For every interval $[l_j,r_j]$, update $\text{cnt}_{l_j} \gets \text{cnt}_{l_j}+1$ and $\text{cnt}_{r_j+1} \gets \text{cnt}_{r_j+1}-1$.</li>
-    <li>After processing all the intervals, replace $\text{cnt}$ by its prefix sum array.</li>
-</ul><br>
-
-To efficiently build the $\text{sum}$ array, follow the steps:
-
-<ul>
-    <li>Initialize with all zeros.</li>
-    <li>For every interval $[l_j,r_j]$, update $\text{sum}_{l_j} \gets \text{sum}_{l_j}+l_j$ and $\text{sum}_{r_j+1} \gets \text{sum}_{r_j+1}-l_j$.</li>
-    <li>After processing all the intervals, replace $\text{sum}$ by its prefix sum array.</li>
+    <li>For every interval $[l_j,r_j]$, update:
+        <ul>
+            <li>$\text{cnt}_{l_j} \gets \text{cnt}_{l_j}+1$</li>
+            <li>$\text{cnt}_{r_j+1} \gets \text{cnt}_{r_j+1}-1$</li>
+            <li>$\text{sum}_{l_j} \gets \text{sum}_{l_j}+l_j$</li>
+            <li>$\text{sum}_{r_j+1} \gets \text{sum}_{r_j+1}-l_j$</li>
+        </ul>
+    </li>
+    <li>After processing all the intervals, replace the $\text{cnt}$ and $\text{sum}$ arrays by their prefix sum arrays.</li>
 </ul><br>
 
 <b>Time Complexity:</b> $O\left(\sum n\right)$
@@ -676,27 +680,26 @@ We will handle these two parts separately using arrays $\text{end}$ and $\text{m
 
 Basically, the array $\text{end}$ handles individual important days (i.e., days that are either start or end of a service interval) and the array $\text{mid}$ handles continuous stretches (i.e., days that are neither start not end of any service interval and hence have identical cost). <br><br>
 
-To efficiently build the $\text{end}$ array, follow the steps:
+To efficiently build the $\text{end}$ and $\text{mid}$ arrays, follow the steps:
 
 <ul>
     <li>Initialize with all zeros.</li>
-    <li>For every service $a_i,b_i,c_i$, find the indices of $a_i$ and $b_i$ in the array $\text{all}$ using binary search to find their compressed values. Let these values be $l_i$ and $r_i$ respectively. Update $\text{end}_{l_i} \gets \text{end}_{l_i}+c_i$ and $\text{end}_{r_i+1} \gets \text{end}_{r_i+1}-c_i$.</li>
-    <li>After processing all the services, replace $\text{end}$ array by its prefix sum array.</li>
-</ul><br>
-
-To efficiently build the $\text{mid}$ array, follow the steps:
-
-<ul>
-    <li>Initialize with all zeros.</li>
-    <li>For every service $a_i,b_i,c_i$, find the indices of $a_i$ and $b_i$ in the array $\text{all}$ using binary search to find their compressed values. Let these values be $l_i$ and $r_i$ respectively. Update $\text{mid}_{l_i} \gets \text{mid}_{l_i}+c_i$ and $\text{mid}_{r_i} \gets \text{mid}_{r_i}-c_i$.</li>
-    <li>After processing all the services, replace $\text{mid}$ array by its prefix sum array.</li>
+    <li>For every service $a_i,b_i,c_i$, find the indices of $a_i$ and $b_i$ in the array $\text{all}$ using binary search to find their compressed values. Let these values be $l_i$ and $r_i$ respectively, update:
+        <ul>
+            <li>$\text{end}_{l_i} \gets \text{end}_{l_i}+c_i$</li>
+            <li>$\text{end}_{r_i+1} \gets \text{end}_{r_i+1}-c_i$</li>
+            <li>$\text{mid}_{l_i} \gets \text{mid}_{l_i}+c_i$</li>
+            <li>$\text{mid}_{r_i} \gets \text{mid}_{r_i}-c_i$</li>
+        </ul>
+    </li>
+    <li>After processing all the services, replace the $\text{end}$ and $\text{mid}$ arrays by their prefix sum arrays.</li>
 </ul><br>
 
 Without considering the subscription plan that costs $C$ yen per day, the total cost required to use all services can be written as:
-$$\sum_{i}\text{end}_i + \sum_{i}\text{mid}_i\cdot\left(\text{all}_{i+1}-\text{all}_i-1\right)$$
+$$\sum_{i=0}^{m-1}\text{end}_i + \sum_{i=0}^{m-2}\text{mid}_i\cdot\left(\text{all}_{i+1}-\text{all}_i-1\right)$$
 
 Considering the subscription plan that costs $C$ yen per day, the minimum total cost required to use all services can be written as:
-$$\sum_{i}\min\left(\text{end}_i, C\right) + \sum_{i}\min\left(\text{mid}_i, C\right)\cdot\left(\text{all}_{i+1}-\text{all}_i-1\right)$$
+$$\sum_{i=0}^{m-1}\min\left(\text{end}_i, C\right) + \sum_{i=0}^{m-2}\min\left(\text{mid}_i, C\right)\cdot\left(\text{all}_{i+1}-\text{all}_i-1\right)$$
 
 <b>Time Complexity:</b> $O(n\log n)$
 
@@ -820,10 +823,10 @@ $$
 
 where $\displaystyle \text{sum}_j = \sum_{\substack{l=1 \\ \text{pre}_{l-1} = j}}^il$, which can be computed by iterating on $l$ from $1$ to $i$.<br><br>
 
-Also, $-n \le \text{pre}_k \le n \left(\because \left|b_k\right| \leq 1\right)$ implies that we need to compute $\text{sum}_j$ for $-n \le j \le n$. To avoid using a map, we can do the following modification to the expression of the inner summation:
+Also, $-n \le \text{pre}_k \le n \left(\because \left|b_k\right| \leq 1\right)$ implies that we have to compute $\text{sum}_j$ for $-n \le j \le n$. To avoid using a map, we can do the following modification to the expression of the inner summation:
 $$\sum_{r=i}^nr\cdot\text{sum}_{\text{pre}_r+n}$$
 
-where $\displaystyle \text{sum}_j = \sum_{\substack{l=1 \\ \text{pre}_{l-1}+n = j}}^il$. Thus, we need to compute $\text{sum}_j$ for $0 \le j \le 2\cdot n$ which can be stored in an array.<br><br>
+where $\displaystyle \text{sum}_j = \sum_{\substack{l=1 \\ \text{pre}_{l-1}+n = j}}^il$. Thus, we have to compute $\text{sum}_j$ for $0 \le j \le 2\cdot n$ which can be stored in an array.<br><br>
 
 The final expression for the answer can be written as:
 $$\sum_{i=1}^na_i\cdot \sum_{r=i}^nr\cdot\text{sum}_{\text{pre}_r+n}$$
@@ -1071,7 +1074,7 @@ Let us define $\displaystyle f(x) = \sum_{i=1}^n\left|x-x_i\right|$ and $\displa
 
 Also, $\left|x-x_i\right| \le D \Rightarrow x_i - D \le x \le x_i + D$. Since $\min x_i = -10^6$, $\max x_i = 10^6$ and $\max D = 10^6$, we have $-2\cdot 10^6 \le x \le 2\cdot 10^6$. To make our computations simpler, we add a value $2\cdot 10^6$ to each $x_i$ so that $0 \le x \le 4\cdot 10^6$. Similarly we add a value $2\cdot 10^6$ to each $y_i$ so that $0 \le y \le 4\cdot 10^6$.<br><br>
 
-We need to count the number of integer pairs $(x,y)$ such that:
+We have to count the number of integer pairs $(x,y)$ such that:
 
 <ul>
     <li>$0 \le x, y \le N$, where $N= 4\cdot10^6$</li>
@@ -1082,7 +1085,7 @@ Let us understand how to compute $f(x)$ efficiently. Build the arrays $\text{cnt
 
 <ul>
     <li>$\displaystyle \text{cnt}_j = \sum_{\substack{i = 1 \\ x_i \le j}}^n1$ : the number of $x_i \le j$, $\quad \forall\; 0 \le j \le N$.</li>
-    <li>$\displaystyle \text{sum}_j = \sum_{\substack{i = 1 \\ x_i \le j}}^nx_i$ : the sum of all $x_i \le j$, $\quad \forall\; 0 \le j \le N$.</li>
+    <li>$\displaystyle \text{sum}_j = \sum_{\substack{i = 1 \\ x_i \le j}}^nx_i$ : the sum of $x_i \le j$, $\quad \forall\; 0 \le j \le N$.</li>
 </ul><br>
 
 We can rewrite the expression for $f(x)$ as:
@@ -1352,7 +1355,7 @@ To efficiently build the $\text{val}$ array, follow the steps:
             <li>$\text{val}_{b_i+1,d_i+1} \gets \text{val}_{b_i+1,d_i+1} + w_i$</li>
         </ul>
     </li>
-    <li>After processing all the queries, replace $\text{val}$ array with its prefix sum array.</li>
+    <li>After processing all the queries, replace the $\text{val}$ array with its prefix sum array.</li>
 </ul><br>
 
 This is the <b>Difference Array</b> technique extended to 2D Prefix Sum. The logic of this extension is left as an exercise to the reader.<br><br>
@@ -1379,21 +1382,21 @@ signed main() {
     int n, m, q;
     cin >> n >> m >> q;
 
-    vector pre(n + 2, vector<int>(m + 2));
+    vector val(n + 2, vector<int>(m + 2));
     while (q--) {
         int a, b, c, d, w;
         cin >> a >> b >> c >> d >> w;
 
-        pre[a][c] += w;
-        pre[a][d + 1] -= w;
-        pre[b + 1][c] -= w;
-        pre[b + 1][d + 1] += w;
+        val[a][c] += w;
+        val[a][d + 1] -= w;
+        val[b + 1][c] -= w;
+        val[b + 1][d + 1] += w;
     }
 
     for (int i = 1; i <= n; i++) {
         for (int j = 1; j <= m; j++) {
-            pre[i][j] += pre[i - 1][j] + pre[i][j - 1] - pre[i - 1][j - 1];
-            cout << pre[i][j] << " ";
+            val[i][j] += val[i - 1][j] + val[i][j - 1] - val[i - 1][j - 1];
+            cout << val[i][j] << " ";
         }
         cout << endl;
     }
@@ -1421,12 +1424,12 @@ Formally, we have to count the number of pairs $(l,r)$ such that:
     <li>$\displaystyle \sum_{i=l}^ra_i \bmod n = 0$</li>
 </ul><br>
 
-Build the prefix sum array $\text{pre}$ of the array $a$. Now, the second condition can be written as:
+Build the prefix sum array $\text{pre}$ of the array $a$. Now the second condition can be written as:
 
 $$
 \begin{aligned}
 & \left(\text{pre}_r - \text{pre}_{l-1}\right) \bmod n = 0 \\[6pt]
-=\; & \text{pre}_{l-1} \bmod n = \text{pre}_r \bmod n
+\Rightarrow\; & \text{pre}_{l-1} \bmod n = \text{pre}_r \bmod n
 \end{aligned}
 $$
 
@@ -1486,7 +1489,34 @@ signed main() {
 <details>
 <summary data-type="solution">Solution</summary>
 <div class="spoiler-content">
-To be added.
+Formally, we have to count the number of pairs $(l,r)$ such that:
+<ul>
+    <li>$1 \le l \le r \le n$</li>
+    <li>$\displaystyle \sum_{i=l}^ra_i = r-l+1$</li>
+</ul><br>
+
+Build the prefix sum array $\text{pre}$ of the array $a$. Now the second condition can be written as:
+
+$$
+\begin{aligned}
+& \text{pre}_r - \text{pre}_{l-1} = r-l+1 \\[6pt]
+\Rightarrow\; & \text{pre}_{l-1} - (l-1) = \text{pre}_r - r
+\end{aligned}
+$$
+
+Replacing $l \rightarrow l+1$, we can rewrite both the conditions as:
+
+<ul>
+    <li>$0 \le l < r \le n$</li>
+    <li>$\text{pre}_{l}-l = \text{pre}_r-r$</li>
+</ul><br>
+
+To count the number of pairs $(l,r)$ satisfying this, we can iterate on $r$ from $1$ to $n$ and keep track of the frequencies of $\text{pre}_l-l$ for $0 \le l < r$.<br><br>
+
+Also, $0 \le \text{pre}_i \le 9\cdot n$ and $0 \le i \le n$ $\Rightarrow -n \le \text{pre}_i-i \le 9\cdot n$. To store the frequencies of $\text{pre}_i-i$ in an array and avoid using a map, we can add a value $n$ to it so that $0 \le \text{pre}_i-i+n \le 10\cdot n$.<br><br>
+
+<b>Time Complexity:</b> $O(n)$
+
 </div>
 </details>
 <details>
@@ -1537,7 +1567,28 @@ signed main() {
 <details>
 <summary data-type="solution">Solution</summary>
 <div class="spoiler-content">
-To be added.
+Build a frequency array where $\text{freq}_i$ denotes the number of turrets which guard the castle wall $i$.<br><br>
+
+To efficiently build the $\text{freq}$ array, follow the steps:
+
+<ul>
+    <li>Initialize with all zeros.</li>
+    <li>For every turret $[l_i,r_i]$, update:
+        <ul>
+            <li>$\text{freq}_{l_i} \gets \text{freq}_{l_i}+1$</li>
+            <li>$\text{freq}_{r_i+1} \gets \text{freq}_{r_i+1}-1$</li>
+        </ul>
+    </li>
+    <li>After processing all the turrets, replace the $\text{freq}$ array with its prefix sum array.</li>
+</ul><br>
+
+For a castle wall $i$, the minimum number of turrets that need to be destroyed so that it is not guarded by any turret is $\text{freq}_i$.<br><br>
+
+Thus, the minimum number of turrets that need to be destroyed so that at least one castle wall is not guarded by any turret is given by:
+$$\min_{1 \le i \le n}\text{freq}_i$$
+
+<b>Time Complexity:</b> $O(n)$
+
 </div>
 </details>
 <details>
@@ -1819,7 +1870,33 @@ signed main() {
 <details>
 <summary data-type="solution">Solution</summary>
 <div class="spoiler-content">
-To be added.
+Formally, we have to count the number of pairs $(l,r)$ such that:
+<ul>
+    <li>$2 \le l \le r < n$</li>
+    <li>$\displaystyle \sum_{i=1}^{l-1}a_i = \sum_{i=l}^ra_i = \sum_{i=r+1}^na_i$</li>
+</ul><br>
+
+Build the prefix sum array $\text{pre}$ of the array $a$. Now the second condition can be written as:
+
+$$
+\begin{aligned}
+& \text{pre}_{l-1} = \text{pre}_r - \text{pre}_{l-1} = \text{pre}_n - \text{pre}_r \\[6pt]
+\Rightarrow\; & \text{pre}_{l-1} = \frac{\text{pre}_n}{3}, \quad \text{pre}_r = \frac{2\cdot \text{pre}_n}{3} \\[6pt]
+\Rightarrow\; & 3\cdot \text{pre}_{l-1} = \text{pre}_n, \quad 3\cdot \text{pre}_r = 2\cdot \text{pre}_n
+\end{aligned}
+$$
+
+Replacing $l \rightarrow l+1$, we can rewrite both the conditions as:
+
+<ul>
+    <li>$1 \le l < r < n$</li>
+    <li>$3\cdot \text{pre}_l = \text{pre}_n, \quad 3\cdot \text{pre}_r = 2\cdot \text{pre}_n$</li>
+</ul><br>
+
+To count the number of pairs $(l,r)$ satisfying this, we can iterate on $r$ from $2$ to $n-1$ and keep track of the count of $l$ such that $1 \le l < r$ and $3\cdot \text{pre}_l = \text{pre}_n$.<br><br>
+
+<b>Time Complexity:</b> $O(n)$
+
 </div>
 </details>
 <details>
@@ -1844,11 +1921,11 @@ signed main() {
         pre[i] += pre[i - 1];
     }
 
-    int ans = 0, freq = 0;
-    for (int r = 1; r < n; r++) {
-        if (3 * pre[r] == 2 * pre[n] && pre[n] % 3 == 0)
-            ans += freq;
-        freq += (3 * pre[r] == pre[n]);
+    int ans = 0, cnt = (3 * pre[1] == pre[n]);
+    for (int r = 2; r < n; r++) {
+        if (3 * pre[r] == 2 * pre[n])
+            ans += cnt;
+        cnt += (3 * pre[r] == pre[n]);
     }
 
     cout << ans << endl;
@@ -2100,7 +2177,48 @@ signed main() {
 <details>
 <summary data-type="solution">Solution</summary>
 <div class="spoiler-content">
-To be added.
+We will use the technique of <b>Coordinate Compression</b> to simplify this problem:
+
+<ul>
+    <li>Initialize an empty vector $\text{all}$.</li>
+    <li>Insert all values of $l_i$ and $r_i$ in $\text{all}$.</li>
+    <li>Sort $\text{all}$ and erase duplicates from it.</li>
+    <li>Let $m$ be the final size of the vector $\text{all}$</li>
+</ul><br>
+
+For each compressed index $i$, there are two distinct parts of points to consider:
+
+<ul>
+    <li>The exact point $\text{all}_i$.</li>
+    <li>All the points in $(\text{all}_i, \text{all}_{i+1})$.</li>
+</ul><br>
+
+We will handle these two parts separately using arrays $\text{end}$ and $\text{mid}$ respectively:
+
+<ul>
+    <li>$\displaystyle \text{end}_i = \sum_{\substack{j = 1 \\ l_j \le \text{all}_i \le r_j}}^{n} 1$ : the number of segments $[l_j,r_j]$ containing the point $\text{all}_i, \quad \forall \; 0 \le i < m$.</li>
+    <li>$\displaystyle \text{mid}_i = \sum_{\substack{j = 1 \\ l_j \le \text{all}_i \\  \text{all}_{i+1} \le r_j}}^{n} 1$ : the number of segments $[l_j,r_j]$ containing all the points in $(\text{all}_i, \text{all}_{i+1}), \quad \forall \; 0 \le i < m-1$.</li>
+</ul><br>
+
+To efficiently build the $\text{end}$ and $\text{mid}$ arrays, follow the steps:
+
+<ul>
+    <li>Initialize with all zeros.</li>
+    <li>For every segment $l_i,r_i$, find the indices of $l_i$ and $r_i$ in the array $\text{all}$ using binary search to find their compressed values. Let these values be $L_i$ and $R_i$ respectively, update:
+        <ul>
+            <li>$\text{end}_{L_i} \gets \text{end}_{L_i}+1$</li>
+            <li>$\text{end}_{R_i+1} \gets \text{end}_{R_i+1}-1$</li>
+            <li>$\text{mid}_{L_i} \gets \text{mid}_{L_i}+1$</li>
+            <li>$\text{mid}_{R_i} \gets \text{mid}_{R_i}-1$</li>
+        </ul>
+    </li>
+    <li>After processing all the segments, replace the $\text{end}$ and $\text{mid}$ arrays by their prefix sum arrays.</li>
+</ul><br>
+
+Using the $\text{end}$ and $\text{mid}$ arrays we can easily construct the smallest set of segments which contains all the points that belong at least k segments. For more details, take a look at the implementation.<br><br>
+
+<b>Time Complexity:</b> $O(n \log n)$
+
 </div>
 </details>
 <details>
@@ -2130,24 +2248,24 @@ signed main() {
     all.erase(unique(all.begin(), all.end()), all.end());
 
     int m = size(all);
-    vector<int> freq(m + 1), freq2(m + 1);
+    vector<int> end(m + 1), mid(m + 1);
     for (auto [l, r] : v) {
         l = lower_bound(all.begin(), all.end(), l) - all.begin();
         r = lower_bound(all.begin(), all.end(), r) - all.begin();
-        freq[l]++, freq[r + 1]--;
-        freq2[l]++, freq2[r]--;
+        end[l]++, end[r + 1]--;
+        mid[l]++, mid[r]--;
     }
 
     for (int i = 1; i < m; i++) {
-        freq[i] += freq[i - 1];
-        freq2[i] += freq2[i - 1];
+        end[i] += end[i - 1];
+        mid[i] += mid[i - 1];
     }
 
     vector<array<int, 2>> ans;
     for (int i = 0; i < m; i++) {
-        if (i && freq2[i - 1] >= k)
+        if (i && mid[i - 1] >= k)
             ans.back()[1] = all[i];
-        else if (freq[i] >= k)
+        else if (end[i] >= k)
             ans.push_back({all[i], all[i]});
     }
 
@@ -2168,7 +2286,51 @@ signed main() {
 <details>
 <summary data-type="solution">Solution</summary>
 <div class="spoiler-content">
-To be added.
+We will use the technique of <b>Coordinate Compression</b> to simplify this problem:
+
+<ul>
+    <li>Initialize an empty vector $\text{all}$.</li>
+    <li>Insert all values of $l_i$ and $r_i$ in $\text{all}$.</li>
+    <li>Sort $\text{all}$ and erase duplicates from it.</li>
+    <li>Let $m$ be the final size of the vector $\text{all}$</li>
+</ul><br>
+
+For each compressed index $i$, there are two distinct parts of points to consider:
+
+<ul>
+    <li>The exact point $\text{all}_i$.</li>
+    <li>The continuous block of points $[\text{all}_i+1, \text{all}_{i+1}-1]$.</li>
+</ul><br>
+
+We will handle these two parts separately using arrays $\text{end}$ and $\text{mid}$ respectively:
+
+<ul>
+    <li>$\displaystyle \text{end}_i = \sum_{\substack{j = 1 \\ l_j \le \text{all}_i \le r_j}}^{n} 1$ : the number of segments $[l_j,r_j]$ containing the point $\text{all}_i, \quad \forall \; 0 \le i < m$.</li>
+    <li>$\displaystyle \text{mid}_i = \sum_{\substack{j = 1 \\ l_j \le \text{all}_i+1 \\  \text{all}_{i+1}-1 \le r_j}}^{n} 1$ : the number of segments $[l_j,r_j]$ containing all the points in $[\text{all}_i+1, \text{all}_{i+1}-1], \quad \forall \; 0 \le i < m-1$.</li>
+</ul><br>
+
+To efficiently build the $\text{end}$ and $\text{mid}$ arrays, follow the steps:
+
+<ul>
+    <li>Initialize with all zeros.</li>
+    <li>For every segment $l_i,r_i$, find the indices of $l_i$ and $r_i$ in the array $\text{all}$ using binary search to find their compressed values. Let these values be $L_i$ and $R_i$ respectively, update:
+        <ul>
+            <li>$\text{end}_{L_i} \gets \text{end}_{L_i}+1$</li>
+            <li>$\text{end}_{R_i+1} \gets \text{end}_{R_i+1}-1$</li>
+            <li>$\text{mid}_{L_i} \gets \text{mid}_{L_i}+1$</li>
+            <li>$\text{mid}_{R_i} \gets \text{mid}_{R_i}-1$</li>
+        </ul>
+    </li>
+    <li>After processing all the segments, replace the $\text{end}$ and $\text{mid}$ arrays by their prefix sum arrays.</li>
+</ul><br>
+
+Let $\text{ans} = $ the number of points in the intersection of any $k$ of the segments. Notice that if any point $j$ is contained in exactly $i$ segments, then its contribution to the value of $\text{ans}$ will be $\displaystyle \left(\begin{array}{cc} i \\ k \\  \end{array}\right) = \frac{i!}{k!\,(i-k)!}$. This is known as the <b>Contribution Technique</b>.<br><br>
+
+Thus, we can write the expression for $\text{ans}$ as:
+$$\sum_{\substack{i=0 \\ \text{end}_i \ge k}}^{m-1}\left(\begin{array}{cc} \text{end}_i \\ k \\  \end{array}\right) + \sum_{\substack{i=0 \\ \text{mid}_i \ge k}}^{m-2}\left(\begin{array}{cc} \text{mid}_i \\ k \\  \end{array}\right)\cdot (\text{all}_{i+1}-\text{all}_i-1)$$
+
+<b>Time Complexity:</b> $O(n \log n)$
+
 </div>
 </details>
 <details>
@@ -2223,29 +2385,26 @@ signed main() {
     all.erase(unique(all.begin(), all.end()), all.end());
 
     int m = size(all);
-    vector<int> freq(m + 1), freq2(m + 1);
+    vector<int> end(m + 1), mid(m + 1);
     for (auto [l, r] : v) {
         l = lower_bound(all.begin(), all.end(), l) - all.begin();
         r = lower_bound(all.begin(), all.end(), r) - all.begin();
-        freq[l]++, freq[r + 1]--;
-        freq2[l]++, freq2[r]--;
+        end[l]++, end[r + 1]--;
+        mid[l]++, mid[r]--;
     }
 
     for (int i = 1; i < m; i++) {
-        freq[i] += freq[i - 1];
-        freq2[i] += freq2[i - 1];
-    }
-
-    vector<int> cnt(n + 1);
-    for (int i = 0; i < m; i++) {
-        cnt[freq[i]]++;
-        if (i + 1 < m)
-            cnt[freq2[i]] += (all[i + 1] - all[i] - 1);
+        end[i] += end[i - 1];
+        mid[i] += mid[i - 1];
     }
 
     int ans = 0;
-    for (int i = k; i <= n; i++)
-        ans = (ans + nCr(i, k) * cnt[i]) % mod;
+    for (int i = 0; i < m; i++) {
+        if (end[i] >= k)
+            ans = (ans + nCr(end[i], k)) % mod;
+        if (i + 1 < m && mid[i] >= k)
+            ans = (ans + nCr(mid[i], k) * (all[i + 1] - all[i] - 1)) % mod;
+    }
     cout << ans << endl;
 
     return 0;
@@ -2261,7 +2420,87 @@ signed main() {
 <details>
 <summary data-type="solution">Solution</summary>
 <div class="spoiler-content">
-To be added.
+Let $\text{val}_i$ denote the value of plant $i$ after all $q$ operations. Formally, we can define $\text{val}_i$ as:
+$$
+\begin{aligned}
+& \sum_{\substack{j=1 \\ l_j \le i \le r_j}}^qf(i-l_j+1) \\[6pt]
+=\; & \sum_{\substack{j=1 \\ l_j \le i \le r_j}}^q{(i-l_j+1)\cdot \text{LSSB}_{i-l_j+1}}
+\end{aligned}
+$$
+
+where $\text{LSSB}_x$ is the value of the least significant set bit of $x$.<br><br>
+
+Also, $1 \le i-l_j+1 \le n$ $\Rightarrow$ $\text{LSSB}_{i-l_j+1} \in \left\{2^0, 2^1, \ldots, 2^N\right\}$ where $N=\left\lfloor \log n \right\rfloor$. Using the <b>Contribution Technique</b>, we can rewrite the expression of $\text{val}$ as:
+
+$$
+\begin{aligned}
+& \sum_{k=0}^N\sum_{\substack{j=1 \\ l_j \le i \le r_j \\ \text{LSSB}_{i-l_j+1}=2^k}}^q{(i-l_j+1)\cdot 2^k} \\[6pt]
+=\; & \sum_{k=0}^N{2^k \cdot \sum_{\substack{j=1 \\ l_j \le i \le r_j \\ \text{LSSB}_{i-l_j+1}=2^k}}^q(i-l_j+1)} \\[6pt]
+=\; & \sum_{k=0}^N{2^k \cdot \left((i+1)\cdot \sum_{\substack{j=1 \\ l_j \le i \le r_j \\ \text{LSSB}_{i-l_j+1}=2^k}}^q1 - \sum_{\substack{j=1 \\ l_j \le i \le r_j \\ \text{LSSB}_{i-l_j+1}=2^k}}^ql_j\right)} \\[6pt]
+\end{aligned}
+$$
+
+Let us define:
+
+<ul>
+    <li>$\displaystyle \text{cnt}_{k,i} = \sum_{\substack{j=1 \\ l_j \le i \le r_j \\ \text{LSSB}_{i-l_j+1}=2^k}}^q1$: the number of operations $[l_j,r_j]$ such that $l_j \le i \le r_j$ and $\text{LSSB}_{i-l_j+1}=2^k$, $\quad \forall \; 0 \le k \le N, 1 \le i \le n$.</li>
+    <li>$\displaystyle \text{sum}_{k,i} = \sum_{\substack{j=1 \\ l_j \le i \le r_j \\ \text{LSSB}_{i-l_j+1}=2^k}}^ql_j$: the sum of $l_j$ over all operations $[l_j,r_j]$ such that $l_j \le i \le r_j$ and $\text{LSSB}_{i-l_j+1}=2^k$, $\quad \forall \; 0 \le k \le N, 1 \le i \le n$.</li>
+</ul><br>
+
+We can rewrite the expression for $\text{val}_i$ as:
+$$\sum_{k=0}^N{2^k \cdot \left((i+1)\cdot \text{cnt}_{k,i} - \text{sum}_{k,i}\right)}$$
+
+<span style="color:Brown;"><b>FACT:</b></span> For any positive integer $x$, $\text{LSSB}_x$ is $2^k$ $(k \ge 0)$ iff $x$ is an odd multiple of $2^k$; formally $\exists\; m \in {\mathbb{Z}}_{\geq 0}$ such that:
+$$x = 2^k \cdot (2\cdot m + 1) = 2^{k+1} \cdot m + 2^k$$
+
+Using this fact, we can say that:
+
+$$
+\begin{aligned}
+& \text{LSSB}_{i-l_j+1} = 2^k \\[6pt]
+\Leftrightarrow\; & i-l_j+1 \in \{2^{k+1}\cdot m+2^k \mid m \in \mathbb{Z}_{\geq 0}\} \\[6pt]
+\Leftrightarrow\; & i \in \{2^{k+1}\cdot m+2^k+l_j-1 \mid m \in \mathbb{Z}_{\geq 0}\}
+\end{aligned}
+$$
+
+This is an arithmetic progression with first term $2^k + l_j-1$ and common difference $2^{k+1}$.<br><br>
+
+From the above analysis we can conclude that for an operation $[l_j,r_j]$, we want to make the following updates efficiently to build the $\text{cnt}$ and $\text{sum}$ arrays:
+
+$$
+\begin{aligned}
+& \text{cnt}_{k,i} \gets \text{cnt}_{k,i} + 1, \quad \forall \; 0 \le k \le N, i \in \{2^{k+1}\cdot m+2^k+l_j-1 \mid m \in \mathbb{Z}_{\geq 0}\} \cap \{l_j,l_j+1,\ldots,r_j\} \\[6pt]
+& \text{sum}_{k,i} \gets \text{sum}_{k,i} + l_j, \quad \forall \; 0 \le k \le N, i \in \{2^{k+1}\cdot m+2^k+l_j-1 \mid m \in \mathbb{Z}_{\geq 0}\} \cap \{l_j,l_j+1,\ldots,r_j\}
+\end{aligned}
+$$
+
+This is equivalent to adding a fixed value to a set of indices $i$ in range $[l_j,r_j]$ which are part of an arithmetic progression having first term $2^k + l_j - 1$ and common difference $2^{k+1}$.<br><br>
+
+<span style="color:Red;"><b><i>NOTE:</i></b></span>
+<i>I recommend you to stop here and think about how to apply the updates efficiently. Since the affected indices form an arithmetic progression with common difference $2^{k+1}$, the updates can be done using the technique of <b>Difference Array</b> along a modulo class.</i><br><br>
+
+To efficiently build the $\text{cnt}$ and $\text{sum}$ arrays, follow the steps:
+
+<ul>
+    <li>Initilize the $\text{cnt}$ and $\text{sum}$ arrays with all zeros.</li>
+    <li>For every operation $[l_j,r_j]$, for a fixed value of $k$, define $a = 2^k + l_j - 1$ (first term), $d = 2^{k+1}$ (common difference), let $\textbf{st}$ and $\textbf{end}$ be the minimum and maximum values respectively in the range $[l_j,r_j]$ which are part of this arithmetic progression, update:
+        <ul>
+            <li>$\text{cnt}_{k,st} \gets \text{cnt}_{k,st} + 1, \quad \forall \; 0 \le k \le N$</li>
+            <li>$\text{cnt}_{k,end+d} \gets \text{cnt}_{k,end+d} - 1, \quad \forall \; 0 \le k \le N$</li>
+            <li>$\text{sum}_{k,st} \gets \text{sum}_{k,st} + l_j, \quad \forall \; 0 \le k \le N$</li>
+            <li>$\text{sum}_{k,end+d} \gets \text{sum}_{k,end+d} - l_j, \quad \forall \; 0 \le k \le N$</li>
+        </ul>
+    </li>
+    <li>After processing all operations, first iterate on $k$ from $0$ to $N$, then iterate on $i$ from $d = 2^{k+1}$ to $n$, update:
+        <ul>
+            <li>$\text{cnt}_{k,i} \gets \text{cnt}_{k,i} + \text{cnt}_{k,i-d}$</li>
+            <li>$\text{sum}_{k,i} \gets \text{sum}_{k,i} + \text{sum}_{k,i-d}$</li>
+        </ul>
+    </li>
+</ul><br>
+
+<b>Time Complexity:</b> $O((n+q) \log n)$
+
 </div>
 </details>
 <details>
@@ -2284,30 +2523,26 @@ signed main() {
         int n, q;
         cin >> n >> q;
 
-        int f = log2(n);
-        vector cnt(f + 1, vector<int>(n + 1));
-        vector sum(f + 1, vector<int>(n + 1));
+        int N = log2(n);
+        vector cnt(N + 1, vector<int>(n + 1));
+        vector sum(N + 1, vector<int>(n + 1));
         for (int i = 0; i < q; i++) {
             int l, r;
             cin >> l >> r;
 
-            for (int k = 0; k <= f; k++) {
-                int a = l - 1 + (1 << k);
-                int d = (1 << (k + 1));
+            for (int k = 0; k <= N; k++) {
+                int a = (1 << k) + l - 1, d = (1 << (k + 1));
+                if (r < a)
+                    continue;
 
-                int m1 = (l < a ? 0 : (l - a) / d + ((l - a) % d != 0));
-                int m2 = (r < a ? -1 : (r - a) / d);
-                if (m1 > m2) continue;
-
-                int st = a + m1 * d;
-                int end = a + m2 * d;
+                int st = a, end = a + ((r - a) / d) * d;
                 cnt[k][st]++, sum[k][st] += l;
                 if (end + d <= n)
                     cnt[k][end + d]--, sum[k][end + d] -= l;
             }
         }
 
-        for (int k = 0; k <= f; k++) {
+        for (int k = 0; k <= N; k++) {
             int d = (1 << (k + 1));
             for (int i = d; i <= n; i++) {
                 cnt[k][i] += cnt[k][i - d];
@@ -2317,7 +2552,7 @@ signed main() {
 
         for (int i = 1; i <= n; i++) {
             int ans = 0;
-            for (int k = 0; k <= f; k++)
+            for (int k = 0; k <= N; k++)
                 ans += ((1 << k) * ((i + 1) * cnt[k][i] - sum[k][i]));
             cout << ans << " ";
         }
@@ -2337,7 +2572,22 @@ signed main() {
 <details>
 <summary data-type="solution">Solution</summary>
 <div class="spoiler-content">
-To be added.
+Formally, we have to compute the value of the expression:
+$$\max_{1 \le l < r < N}\left(\sum_{i=1}^lA_i + \sum_{i=l+1}^rB_i + \sum_{i=r+1}^NC_i\right)$$
+
+Build the prefix sum arrays $\text{pre1}$, $\text{pre2}$, $\text{pre3}$ of the arrays $A$, $B$, $C$ respectively. Now we can rewrite the expression as:
+
+$$
+\begin{aligned}
+& \max_{1 \le l < r < N}\left(\text{pre1}_l + \text{pre2}_r - \text{pre2}_l + \text{pre3}_N - \text{pre3}_r\right) \\[6pt]
+=\; & \max_{2 \le r < N}\left(\text{pre3}_N + \text{pre2}_r - \text{pre3}_r + \max_{1 \le l < r}\left(\text{pre1}_l-\text{pre2}_l\right)\right)
+\end{aligned}
+$$
+
+To compute this, we can iterate on $r$ from $2$ to $N-1$ and keep track of $\displaystyle \max_{1 \le l < r}\left(\text{pre1}_l-\text{pre2}_l\right)$.<br><br>
+
+<b>Time Complexity:</b> $O(N)$
+
 </div>
 </details>
 <details>
@@ -2356,24 +2606,24 @@ signed main() {
     int n;
     cin >> n;
 
-    vector<int> p1(n + 1), p2(n + 1), p3(n + 1);
+    vector<int> pre1(n + 1), pre2(n + 1), pre3(n + 1);
     for (int i = 1; i <= n; i++) {
-        cin >> p1[i];
-        p1[i] += p1[i - 1];
+        cin >> pre1[i];
+        pre1[i] += pre1[i - 1];
     }
     for (int i = 1; i <= n; i++) {
-        cin >> p2[i];
-        p2[i] += p2[i - 1];
+        cin >> pre2[i];
+        pre2[i] += pre2[i - 1];
     }
     for (int i = 1; i <= n; i++) {
-        cin >> p3[i];
-        p3[i] += p3[i - 1];
+        cin >> pre3[i];
+        pre3[i] += pre3[i - 1];
     }
 
-    int ans = 0, mx = p1[1] - p2[1];
-    for (int i = 2; i < n; i++) {
-        ans = max(ans, p3[n] + (p2[i] - p3[i]) + mx);
-        mx = max(mx, p1[i] - p2[i]);
+    int ans = 0, mx = pre1[1] - pre2[1];
+    for (int r = 2; r < n; r++) {
+        ans = max(ans, pre3[n] + pre2[r] - pre3[r] + mx);
+        mx = max(mx, pre1[r] - pre2[r]);
     }
 
     cout << ans << endl;
@@ -2642,7 +2892,27 @@ signed main() {
 <details>
 <summary data-type="solution">Solution</summary>
 <div class="spoiler-content">
-To be added.
+Build an array $\text{val}$, where $\text{val}_{i,j}$ denotes the value of $a_{i,j}$ after all $q$ queries assuming that $a_{i,j} = 0$ initially.<br><br>
+
+To efficiently build the the $\text{val}$ array, follow the steps:
+
+<ul>
+    <li>Initialize with all zeros.</li>
+    <li>For every query $x_1,y_1,x_2,y_2$, update:
+        <ul>
+            <li>$\text{val}_{x_1,y_1} \gets \text{val}_{x_1,y_1} \oplus 1$</li>
+            <li>$\text{val}_{x_1,y_2+1} \gets \text{val}_{x_1,y_2+1} \oplus 1$</li>
+            <li>$\text{val}_{x_2+1,y_1} \gets \text{val}_{x_2+1,y_1} \oplus 1$</li>
+            <li>$\text{val}_{x_2+1,y_2+1} \gets \text{val}_{x_2+1,y_2+1} \oplus 1$</li>
+        </ul>
+    </li>
+    <li>After processing all the queries, replace $\text{val}$ array by its prefix xor array.</li>
+</ul><br>
+
+The value of $a_{i,j}$ after all $q$ queries is given by $a_{i,j} \oplus \text{val}_{i,j}$.<br><br>
+
+<b>Time Complexity:</b> $O(n\cdot m)$
+
 </div>
 </details>
 <details>
@@ -2673,21 +2943,21 @@ signed main() {
     int q;
     cin >> q;
 
-    vector pre(n + 2, vector<int>(m + 2));
+    vector val(n + 2, vector<int>(m + 2));
     while (q--) {
         int x1, y1, x2, y2;
         cin >> x1 >> y1 >> x2 >> y2;
 
-        pre[x1][y1] ^= 1;
-        pre[x1][y2 + 1] ^= 1;
-        pre[x2 + 1][y1] ^= 1;
-        pre[x2 + 1][y2 + 1] ^= 1;
+        val[x1][y1] ^= 1;
+        val[x1][y2 + 1] ^= 1;
+        val[x2 + 1][y1] ^= 1;
+        val[x2 + 1][y2 + 1] ^= 1;
     }
 
     for (int i = 1; i <= n; i++) {
         for (int j = 1; j <= m; j++) {
-            pre[i][j] ^= pre[i - 1][j] ^ pre[i][j - 1] ^ pre[i - 1][j - 1];
-            cout << (a[i][j] ^ pre[i][j]);
+            val[i][j] ^= val[i - 1][j] ^ val[i][j - 1] ^ val[i - 1][j - 1];
+            cout << (a[i][j] ^ val[i][j]);
         }
         cout << endl;
     }
