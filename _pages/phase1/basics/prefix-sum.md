@@ -386,7 +386,10 @@ For each query, print the number of admissible integer temperatures in the range
 <details>
 <summary data-type="solution">Solution</summary>
 <div class="spoiler-content">
-Build a frequency array where $\text{freq}_i$ denotes the number of intervals to which the temperature $i$ belongs.<br><br>
+Let us define:
+<ul>
+    <li>$\displaystyle \text{freq}_i = \sum_{\substack{j=1 \\[3pt] l_j \le i \le r_j}}^n1$: the number of intervals to which the temperature $i$ belongs, $\quad \forall \; 1 \le i \le N$ where $N = 2\cdot 10^5$.</li>
+</ul><br>
 
 To efficiently build the $\text{freq}$ array, follow the steps:
 
@@ -401,7 +404,7 @@ To efficiently build the $\text{freq}$ array, follow the steps:
     <li>After processing all the intervals, replace the $\text{freq}$ array with its prefix sum array.</li>
 </ul><br>
 
-The logic behind this technique (known as <b>Difference Array</b>):
+The logic behind this technique (known as <b>Difference Array</b>) is explained below:
 
 <ul>
     <li>When we perform $\text{freq}_{l_i} \gets \text{freq}_{l_i}+1$ and later replace the $\text{freq}$ array by its prefix sum array, the frequency of all temperatures $\ge l_i$ gets increased by $1$.</li>
@@ -410,7 +413,7 @@ The logic behind this technique (known as <b>Difference Array</b>):
     <li>As a result, the net effect is that only temperatures in the range $[l_i,r_i]$ have their frequency increased by $1$, while other temperatures remain unaffected.</li>
 </ul><br>
 
-Define an array $c$ as:
+Let us define:
 
 $$
 c_i =
@@ -418,14 +421,12 @@ c_i =
 1, & \text{if } \text{freq}_i \ge k \\
 0, & \text{otherwise}
 \end{cases}
-,\quad \forall \;1 \le i \le N\\
+,\quad \forall \;1 \le i \le N.
 $$
-
-where $N=2\cdot10^5$.<br><br>
 
 Build the prefix sum array $\text{pre}$ of the array $c$. The number of admissible integer temperatures in the range $[a,b]$ is given by $\text{pre}_b - \text{pre}_{a-1}$.<br><br>
 
-<b>Time Complexity:</b> $O(N)$
+<b>Time Complexity:</b> $O(N + n)$
 
 </div>
 
@@ -530,20 +531,25 @@ For each test case, print $n$ integers, where the $i^{th}$ integer represents th
 <details>
 <summary data-type="solution">Solution</summary>
 <div class="spoiler-content">
-Let $\text{val}_i$ denote the number of statues destroyed in city $i$ after $q$ days. Formally, we can define $\text{val}_i$ as:
+Let us define:
+<ul>
+    <li>$\displaystyle \text{val}_i = \sum_{\substack{j = 1 \\[3pt] l_j \le i \le r_j}}^{q} (i - l_j + 1)$: the total number of statues destroyed in city $i$ after $q$ days, $\quad \forall \; 1 \le i \le n$.</li>
+</ul><br>
+
+We can rewrite the expression for $\text{val}_i$ as:
+
 $$
 \begin{aligned}
-& \sum_{\substack{j = 1 \\ l_j \le i \le r_j}}^{q} (i - l_j + 1) \\[6pt]
-=\; & \sum_{\substack{j = 1 \\ l_j \le i \le r_j}}^{q} (i+1) - \sum_{\substack{j = 1 \\ l_j \le i \le r_j}}^{q} l_j \\[6pt]
-=\; & (i+1)\cdot\sum_{\substack{j = 1 \\ l_j \le i \le r_j}}^{q} 1 - \sum_{\substack{j = 1 \\ l_j \le i \le r_j}}^{q} l_j
+& \sum_{\substack{j = 1 \\[3pt] l_j \le i \le r_j}}^{q} (i+1) - \sum_{\substack{j = 1 \\[3pt] l_j \le i \le r_j}}^{q} l_j \\[6pt]
+=\; & (i+1)\cdot\sum_{\substack{j = 1 \\[3pt] l_j \le i \le r_j}}^{q} 1 - \sum_{\substack{j = 1 \\[3pt] l_j \le i \le r_j}}^{q} l_j
 \end{aligned}
 $$
 
 Let us define:
 
 <ul>
-    <li>$\displaystyle \text{cnt}_i = \sum_{\substack{j = 1 \\ l_j \le i \le r_j}}^{q} 1$ : the number of intervals $[l_j,r_j]$ such that $l_j \le i \le r_j, \quad \forall \; 1 \le i \le n$.</li>
-    <li>$\displaystyle \text{sum}_i = \sum_{\substack{j = 1 \\ l_j \le i \le r_j}}^{q} l_j$ : the sum of $l_j$ over all intervals $[l_j,r_j]$ such that $l_j \le i \le r_j, \quad \forall \; 1 \le i \le n$.</li>
+    <li>$\displaystyle \text{cnt}_i = \sum_{\substack{j = 1 \\[3pt] l_j \le i \le r_j}}^{q} 1$ : the number of intervals $[l_j,r_j]$ such that $l_j \le i \le r_j, \quad \forall \; 1 \le i \le n$.</li>
+    <li>$\displaystyle \text{sum}_i = \sum_{\substack{j = 1 \\[3pt] l_j \le i \le r_j}}^{q} l_j$ : the sum of $l_j$ over all intervals $[l_j,r_j]$ such that $l_j \le i \le r_j, \quad \forall \; 1 \le i \le n$.</li>
 </ul><br>
 
 We can rewrite the expression for $\text{val}_i$ as:
@@ -674,8 +680,8 @@ For each compressed index $i$, there are two distinct parts of days to consider:
 We will handle these two parts separately using arrays $\text{end}$ and $\text{mid}$ respectively:
 
 <ul>
-    <li>$\displaystyle \text{end}_i = \sum_{\substack{j = 1 \\ l_j \le \text{all}_i \le r_j}}^{n} c_j$ : the total cost of all services active on day $\text{all}_i, \quad \forall \; 0 \le i < m$.</li>
-    <li>$\displaystyle \text{mid}_i = \sum_{\substack{j = 1 \\ l_j \le \text{all}_i+1 \\  \text{all}_{i+1}-1 \le r_j}}^{n} c_j$ : the total cost of all services active on every day in $[\text{all}_i+1, \text{all}_{i+1}-1], \quad \forall \; 0 \le i < m-1$.</li>
+    <li>$\displaystyle \text{end}_i = \sum_{\substack{j = 1 \\[3pt] l_j \le \text{all}_i \le r_j}}^{n} c_j$ : the total cost of all services active on day $\text{all}_i, \quad \forall \; 0 \le i < m$.</li>
+    <li>$\displaystyle \text{mid}_i = \sum_{\substack{j = 1 \\[3pt] l_j \le \text{all}_i+1 \\[3pt]  \text{all}_{i+1}-1 \le r_j}}^{n} c_j$ : the total cost of all services active on every day in $[\text{all}_i+1, \text{all}_{i+1}-1], \quad \forall \; 0 \le i < m-1$.</li>
 </ul><br>
 
 Basically, the array $\text{end}$ handles individual important days (i.e., days that are either start or end of a service interval) and the array $\text{mid}$ handles continuous stretches (i.e., days that are neither start not end of any service interval and hence have identical cost). <br><br>
@@ -798,15 +804,15 @@ Print the value of the given expression.<br><br>
 We can rewrite the given expression as:
 $$
 \begin{aligned}
-& \sum_{i=1}^n\sum_{\substack{1 \le l \le i \le r \le n \\ (r - l)\ \text{even} \\ \text{median}(l,r)=a_i}}l \cdot r \cdot a_i \\[6pt]
-=\; & \sum_{i=1}^na_i\cdot\sum_{\substack{1 \le l \le i \le r \le n \\ (r - l)\ \text{even} \\ \text{median}(l,r)=a_i}}l \cdot r
+& \sum_{i=1}^n\sum_{\substack{1 \le l \le i \le r \le n \\[3pt] (r - l)\ \text{even} \\[3pt] \text{median}(l,r)=a_i}}l \cdot r \cdot a_i \\[6pt]
+=\; & \sum_{i=1}^na_i\cdot\sum_{\substack{1 \le l \le i \le r \le n \\[3pt] (r - l)\ \text{even} \\[3pt] \text{median}(l,r)=a_i}}l \cdot r
 \end{aligned}
 $$
 
-To compute the inner summation for a fixed $i$, define an array $b$ as:
+To compute the inner summation for a fixed $i$, let us define:
 
 $$
-b_j = \begin{cases} 1, & \text{if } a_j > a_i \\ 0, & \text{if } a_j = a_i \\ -1, & \text{if } a_j < a_i \end{cases}, \quad \forall \; 1 \le j \le n
+b_j = \begin{cases} 1, & \text{if } a_j > a_i \\ 0, & \text{if } a_j = a_i \\ -1, & \text{if } a_j < a_i \end{cases}, \quad \forall \; 1 \le j \le n.
 $$
 
 The median of an odd length subarray $[l,r]$ will be $a_i$ iff $l \le i \le r$ and $\displaystyle \sum_{j=l}^rb_j = 0$ since this implies that the number of elements $> a_i$ (which have been assigned a value $1$) is equal to the number of elements $< a_i$ (which have been assigned a value $-1$) in the subarray. <br><br>
@@ -815,18 +821,18 @@ Build the prefix sum array $\text{pre}$ of the array $b$. We can rewrite the exp
 
 $$
 \begin{aligned}
-& \sum_{\substack{1 \le l \le i \le r \le n \\ \text{pre}_{l-1} = \text{pre}_r}}l \cdot r \\[6pt]
-=\; & \sum_{r=i}^nr\cdot\sum_{\substack{l=1 \\ \text{pre}_{l-1} = \text{pre}_r}}^il \\[6pt]
+& \sum_{\substack{1 \le l \le i \le r \le n \\[3pt] \text{pre}_{l-1} = \text{pre}_r}}l \cdot r \\[6pt]
+=\; & \sum_{r=i}^nr\cdot\sum_{\substack{l=1 \\[3pt] \text{pre}_{l-1} = \text{pre}_r}}^il \\[6pt]
 =\; & \sum_{r=i}^nr\cdot\text{sum}_{\text{pre}_r}
 \end{aligned}
 $$
 
-where $\displaystyle \text{sum}_j = \sum_{\substack{l=1 \\ \text{pre}_{l-1} = j}}^il$, which can be computed by iterating on $l$ from $1$ to $i$.<br><br>
+where $\displaystyle \text{sum}_j = \sum_{\substack{l=1 \\[3pt] \text{pre}_{l-1} = j}}^il$, which can be computed by iterating on $l$ from $1$ to $i$.<br><br>
 
 Also, $-n \le \text{pre}_k \le n \left(\because \left|b_k\right| \leq 1\right)$ implies that we have to compute $\text{sum}_j$ for $-n \le j \le n$. To avoid using a map, we can do the following modification to the expression of the inner summation:
 $$\sum_{r=i}^nr\cdot\text{sum}_{\text{pre}_r+n}$$
 
-where $\displaystyle \text{sum}_j = \sum_{\substack{l=1 \\ \text{pre}_{l-1}+n = j}}^il$. Thus, we have to compute $\text{sum}_j$ for $0 \le j \le 2\cdot n$ which can be stored in an array.<br><br>
+where $\displaystyle \text{sum}_j = \sum_{\substack{l=1 \\[3pt] \text{pre}_{l-1}+n = j}}^il$. Thus, we have to compute $\text{sum}_j$ for $0 \le j \le 2\cdot n$ which can be stored in an array.<br><br>
 
 The final expression for the answer can be written as:
 $$\sum_{i=1}^na_i\cdot \sum_{r=i}^nr\cdot\text{sum}_{\text{pre}_r+n}$$
@@ -1070,7 +1076,11 @@ Print the number of integer pairs $(x,y)$ satisfying the given condition.<br><br
 <details>
 <summary data-type="solution">Solution</summary>
 <div class="spoiler-content">
-Let us define $\displaystyle f(x) = \sum_{i=1}^n\left|x-x_i\right|$ and $\displaystyle g(y) = \sum_{i=1}^n\left|y-y_i\right|$.<br><br>
+Let us define:
+<ul>
+    <li>$\displaystyle f(x) = \sum_{i=1}^n\left|x-x_i\right|$, $\quad \forall \; 1 \le i \le n$.</li>
+    <li>$\displaystyle g(y) = \sum_{i=1}^n\left|y-y_i\right|$, $\quad \forall \; 1 \le i \le n$.</li>
+</ul><br>
 
 Also, $\left|x-x_i\right| \le D \Rightarrow x_i - D \le x \le x_i + D$. Since $\min x_i = -10^6$, $\max x_i = 10^6$ and $\max D = 10^6$, we have $-2\cdot 10^6 \le x \le 2\cdot 10^6$. To make our computations simpler, we add a value $2\cdot 10^6$ to each $x_i$ so that $0 \le x \le 4\cdot 10^6$. Similarly we add a value $2\cdot 10^6$ to each $y_i$ so that $0 \le y \le 4\cdot 10^6$.<br><br>
 
@@ -1084,17 +1094,17 @@ We have to count the number of integer pairs $(x,y)$ such that:
 Let us understand how to compute $f(x)$ efficiently. Build the arrays $\text{cnt}$ and $\text{sum}$ as:
 
 <ul>
-    <li>$\displaystyle \text{cnt}_j = \sum_{\substack{i = 1 \\ x_i \le j}}^n1$ : the number of $x_i \le j$, $\quad \forall\; 0 \le j \le N$.</li>
-    <li>$\displaystyle \text{sum}_j = \sum_{\substack{i = 1 \\ x_i \le j}}^nx_i$ : the sum of $x_i \le j$, $\quad \forall\; 0 \le j \le N$.</li>
+    <li>$\displaystyle \text{cnt}_j = \sum_{\substack{i = 1 \\[3pt] x_i \le j}}^n1$ : the number of $x_i \le j$, $\quad \forall\; 0 \le j \le N$.</li>
+    <li>$\displaystyle \text{sum}_j = \sum_{\substack{i = 1 \\[3pt] x_i \le j}}^nx_i$ : the sum of $x_i \le j$, $\quad \forall\; 0 \le j \le N$.</li>
 </ul><br>
 
 We can rewrite the expression for $f(x)$ as:
 
 $$
 \begin{aligned}
-& \sum_{\substack{i=1 \\ x_i \le x}}^n(x-x_i) + \sum_{\substack{i=1 \\ x_i > x}}^n(x_i-x) \\[6pt]
-=\; & \sum_{\substack{i=1 \\ x_i \le x}}^nx - \sum_{\substack{i=1 \\ x_i \le x}}^nx_i + \sum_{\substack{i=1 \\ x_i > x}}^nx_i - \sum_{\substack{i=1 \\ x_i > x}}^nx \\[6pt]
-=\; & x\cdot\sum_{\substack{i=1 \\ x_i \le x}}^n1 - \sum_{\substack{i=1 \\ x_i \le x}}^nx_i + \sum_{\substack{i=1 \\ x_i > x}}^nx_i - x\cdot\sum_{\substack{i=1 \\ x_i > x}}^n1 \\[6pt]
+& \sum_{\substack{i=1 \\[3pt] x_i \le x}}^n(x-x_i) + \sum_{\substack{i=1 \\[3pt] x_i > x}}^n(x_i-x) \\[6pt]
+=\; & \sum_{\substack{i=1 \\[3pt] x_i \le x}}^nx - \sum_{\substack{i=1 \\[3pt] x_i \le x}}^nx_i + \sum_{\substack{i=1 \\[3pt] x_i > x}}^nx_i - \sum_{\substack{i=1 \\[3pt] x_i > x}}^nx \\[6pt]
+=\; & x\cdot\sum_{\substack{i=1 \\[3pt] x_i \le x}}^n1 - \sum_{\substack{i=1 \\[3pt] x_i \le x}}^nx_i + \sum_{\substack{i=1 \\[3pt] x_i > x}}^nx_i - x\cdot\sum_{\substack{i=1 \\[3pt] x_i > x}}^n1 \\[6pt]
 =\; & x\cdot\text{cnt}_x - \text{sum}_x + (\text{sum}_N - \text{sum}_x) - x\cdot(\text{cnt}_N - \text{cnt}_x) \\[6pt]
 =\; & \text{sum}_N - 2\cdot\text{sum}_x + 2\cdot x\cdot\text{cnt}_x - x\cdot\text{cnt}_N \\[6pt]
 =\; & \text{sum}_N - 2\cdot\text{sum}_x + 2\cdot x\cdot\text{cnt}_x - x\cdot n
@@ -1341,7 +1351,10 @@ Print the final state of the grid after performing all $q$ operations.<br><br>
 <details>
 <summary data-type="solution">Solution</summary>
 <div class="spoiler-content">
-Build an array $\text{val}$, where $\text{val}_{i,j}$ denotes the value of $a_{i,j}$ after all $q$ operations.<br><br>
+Let us define:
+<ul>
+    <li>$\displaystyle \text{val}_{i,j} = \sum_{\substack{k=1 \\ a_k \le i \le b_k \\ c_k \le j \le d_k}}^q{w_k}$: the value of $a_{i,j}$ after all $q$ operations, $\quad \forall \; 1 \le i \le n, 1 \le j \le m$.</li>
+</ul><br>
 
 To efficiently build the $\text{val}$ array, follow the steps:
 
@@ -1358,7 +1371,7 @@ To efficiently build the $\text{val}$ array, follow the steps:
     <li>After processing all the queries, replace the $\text{val}$ array with its prefix sum array.</li>
 </ul><br>
 
-This is the <b>Difference Array</b> technique extended to 2D Prefix Sum. The logic of this extension is left as an exercise to the reader.<br><br>
+This is the <b>Difference Array</b> technique extended to 2D Prefix Sum. The logic of this extension is left as an exercise for you.<br><br>
 
 <b>Time Complexity:</b> $O(n\cdot m)$
 
@@ -1515,7 +1528,7 @@ To count the number of pairs $(l,r)$ satisfying this, we can iterate on $r$ from
 
 Also, $0 \le \text{pre}_i \le 9\cdot n$ and $0 \le i \le n$ $\Rightarrow -n \le \text{pre}_i-i \le 9\cdot n$. To store the frequencies of $\text{pre}_i-i$ in an array and avoid using a map, we can add a value $n$ to it so that $0 \le \text{pre}_i-i+n \le 10\cdot n$.<br><br>
 
-<b>Time Complexity:</b> $O(n)$
+<b>Time Complexity:</b> $O(\sum{n})$
 
 </div>
 </details>
@@ -1567,7 +1580,10 @@ signed main() {
 <details>
 <summary data-type="solution">Solution</summary>
 <div class="spoiler-content">
-Build a frequency array where $\text{freq}_i$ denotes the number of turrets which guard the castle wall $i$.<br><br>
+Let us define:
+<ul>
+    <li>$\displaystyle \text{freq}_i = \sum_{\substack{j = 1 \\[3pt] l_j \le i \le r_j}}^m1$: the number of turrets which guard the castle wall $i$, $\quad \forall \; 1 \le i \le n$.</li>
+</ul><br>
 
 To efficiently build the $\text{freq}$ array, follow the steps:
 
@@ -1754,7 +1770,42 @@ signed main() {
 <details>
 <summary data-type="solution">Solution</summary>
 <div class="spoiler-content">
-To be added.
+Let us define:
+<ul>
+    <li>$\displaystyle \text{freq}_i = \sum_{\substack{j=1 \\[3pt] x_j \le i \le y_j}}^k1$: the number of times operation $i$ needs to be applied, $\quad \forall \; 1 \le i \le m$.</li>
+    <li>$\displaystyle \text{sum}_i = \sum_{\substack{j=1 \\[3pt] l_j \le i \le r_j}}^md_j$: the total value added to $a_i$ after applying all $m$ operations, $\quad \forall \; 1 \le i \le n$.</li>
+</ul><br>
+
+To efficiently build the $\text{freq}$ array, follow the steps:
+
+<ul>
+    <li>Initialize with all zeros.</li>
+    <li>For every query $[x_i,y_i]$, update:
+        <ul>
+            <li>$\text{freq}_{x_i} \gets \text{freq}_{x_i} + 1$</li>
+            <li>$\text{freq}_{y_i+1} \gets \text{freq}_{y_i+1} - 1$</li>
+        </ul>
+    </li>
+    <li>After processing all the queries, replace the $\text{freq}$ array with its prefix sum array.</li>
+</ul><br>
+
+To efficiently build the $\text{sum}$ array, follow the steps:
+
+<ul>
+    <li>Initialize with all zeros.</li>
+    <li>For every operation $[l_i,r_i,d_i]$, update:
+        <ul>
+            <li>$\text{sum}_{l_i} \gets \text{sum}_{l_i} + d_i\cdot \text{freq}_i$</li>
+            <li>$\text{sum}_{r_i+1} \gets \text{sum}_{r_i+1} - d_i\cdot \text{freq}_i$</li>
+        </ul>
+    </li>
+    <li>After processing all the operations, replace the $\text{sum}$ array with its prefix sum array.</li>
+</ul><br>
+
+After applying all $m$ operations, the value of element at index $i$ is given by $a_i + \text{sum}_i$.<br><br>
+
+<b>Time Complexity:</b> $O(n)$
+
 </div>
 </details>
 <details>
@@ -1967,27 +2018,25 @@ signed main() {
         cin >> n;
 
         int ans = 0;
-        vector<int> left(n), right(n);
+        vector left(n + 1, vector<int>(n));
+        vector right(n + 1, vector<int>(n));
         for (int i = 0; i < n; i++) {
-            int cur = 0;
-            vector<int> nleft(n), nright(n);
+            int pre = 0;
             for (int j = 0; j < n; j++) {
                 char c;
                 cin >> c;
 
-                nleft[max(j - 1, 0LL)] ^= left[j];
-                nright[min(j + 1, n - 1)] ^= right[j];
+                left[i + 1][max(j - 1, 0LL)] ^= left[i][j];
+                right[i + 1][min(j + 1, n - 1)] ^= right[i][j];
 
-                cur ^= left[j];
-                if (cur ^ (c == '1')) {
-                    nleft[max(j - 1, 0LL)] ^= 1LL;
-                    nright[min(j + 1, n - 1)] ^= 1LL;
+                pre ^= left[i][j];
+                if (pre ^ (c == '1')) {
+                    left[i + 1][max(j - 1, 0LL)] ^= 1LL;
+                    right[i + 1][min(j + 1, n - 1)] ^= 1LL;
                     ans++;
                 }
-                cur ^= right[j];
+                pre ^= right[i][j];
             }
-
-            swap(left, nleft), swap(right, nright);
         }
 
         cout << ans << endl;
@@ -2124,7 +2173,40 @@ signed main() {
 <details>
 <summary data-type="solution">Solution</summary>
 <div class="spoiler-content">
-To be added.
+Notice that two of the maximums should be at the ends of the range $[l,r]$, otherwise we can move at least one of the boundaries closer to the other and get a better answer.<br><br>
+
+Formally, we have to compute the value of the expression:
+
+$$
+\begin{aligned}
+& \max_{1 \le l < i < r \le n}\left(b_l + b_i + b_r - (r-l)\right) \\[6pt]
+=\; & \max_{1 < i < n}\left(b_i + \max_{1 \le l < i}(b_l+l) + \max_{i < r \le n}(b_r-r)\right) \\[6pt]
+\end{aligned}
+$$
+
+Let us define:
+
+<ul>
+    <li>$\displaystyle \text{pre}_i = \max_{1 \le j \le i}(b_j + j), \quad \forall \; 1 \le i \le n$.</li>
+    <li>$\displaystyle \text{suf}_i = \max_{i \le j \le n}(b_j - j), \quad \forall \; 1 \le i \le n$.</li>
+</ul><br>
+
+We can rewrite the above expression as:
+$$\max_{1 < i < n}\left(b_i + \text{pre}_{i-1} + \text{suf}_{i+1}\right)$$
+
+To efficiently build the $\text{pre}$ and $\text{suf}$ arrays, use the following relations:
+
+$$
+\begin{aligned}
+& \text{pre}_1 = b_1 + 1 \\[6pt]
+& \text{pre}_i = \max(\text{pre}_{i-1}, b_i+i), \quad \forall \; 1 < i \le n \\[6pt]
+& \text{suf}_n = b_n - n \\[6pt]
+& \text{suf}_i = \max(\text{suf}_{i+1}, b_i-i), \quad \forall \; 1 \le i < n
+\end{aligned}
+$$
+
+<b>Time Complexity:</b> $O(\sum{n})$
+
 </div>
 </details>
 <details>
@@ -2147,19 +2229,22 @@ signed main() {
         int n;
         cin >> n;
 
-        vector<int> b(n + 1), pre(n + 1), suf(n + 1);
-        for (int i = 1; i <= n; i++) {
+        vector<int> b(n + 1);
+        for (int i = 1; i <= n; i++)
             cin >> b[i];
-            pre[i] = b[i] + i, suf[i] = b[i] - i;
-        }
 
+        vector<int> pre(n + 1);
+        pre[1] = b[1] + 1;
         for (int i = 2; i <= n; i++)
-            pre[i] = max(pre[i], pre[i - 1]);
-        for (int i = n - 1; i >= 0; i--)
-            suf[i] = max(suf[i], suf[i + 1]);
+            pre[i] = max(pre[i - 1], b[i] + i);
+
+        vector<int> suf(n + 1);
+        suf[n] = b[n] - n;
+        for (int i = n - 1; i >= 1; i--)
+            suf[i] = max(suf[i + 1], b[i] - i);
 
         int ans = 0;
-        for (int i = 2; i < n; i++)
+        for (int i = 2; i <= n - 1; i++)
             ans = max(ans, b[i] + pre[i - 1] + suf[i + 1]);
         cout << ans << endl;
     }
@@ -2196,8 +2281,8 @@ For each compressed index $i$, there are two distinct parts of points to conside
 We will handle these two parts separately using arrays $\text{end}$ and $\text{mid}$ respectively:
 
 <ul>
-    <li>$\displaystyle \text{end}_i = \sum_{\substack{j = 1 \\ l_j \le \text{all}_i \le r_j}}^{n} 1$ : the number of segments $[l_j,r_j]$ containing the point $\text{all}_i, \quad \forall \; 0 \le i < m$.</li>
-    <li>$\displaystyle \text{mid}_i = \sum_{\substack{j = 1 \\ l_j \le \text{all}_i \\  \text{all}_{i+1} \le r_j}}^{n} 1$ : the number of segments $[l_j,r_j]$ containing all the points in $(\text{all}_i, \text{all}_{i+1}), \quad \forall \; 0 \le i < m-1$.</li>
+    <li>$\displaystyle \text{end}_i = \sum_{\substack{j = 1 \\[3pt] l_j \le \text{all}_i \le r_j}}^{n} 1$ : the number of segments $[l_j,r_j]$ containing the point $\text{all}_i, \quad \forall \; 0 \le i < m$.</li>
+    <li>$\displaystyle \text{mid}_i = \sum_{\substack{j = 1 \\[3pt] l_j \le \text{all}_i \\[3pt]  \text{all}_{i+1} \le r_j}}^{n} 1$ : the number of segments $[l_j,r_j]$ containing all the points in $(\text{all}_i, \text{all}_{i+1}), \quad \forall \; 0 \le i < m-1$.</li>
 </ul><br>
 
 To efficiently build the $\text{end}$ and $\text{mid}$ arrays, follow the steps:
@@ -2305,8 +2390,8 @@ For each compressed index $i$, there are two distinct parts of points to conside
 We will handle these two parts separately using arrays $\text{end}$ and $\text{mid}$ respectively:
 
 <ul>
-    <li>$\displaystyle \text{end}_i = \sum_{\substack{j = 1 \\ l_j \le \text{all}_i \le r_j}}^{n} 1$ : the number of segments $[l_j,r_j]$ containing the point $\text{all}_i, \quad \forall \; 0 \le i < m$.</li>
-    <li>$\displaystyle \text{mid}_i = \sum_{\substack{j = 1 \\ l_j \le \text{all}_i+1 \\  \text{all}_{i+1}-1 \le r_j}}^{n} 1$ : the number of segments $[l_j,r_j]$ containing all the points in $[\text{all}_i+1, \text{all}_{i+1}-1], \quad \forall \; 0 \le i < m-1$.</li>
+    <li>$\displaystyle \text{end}_i = \sum_{\substack{j = 1 \\[3pt] l_j \le \text{all}_i \le r_j}}^{n} 1$ : the number of segments $[l_j,r_j]$ containing the point $\text{all}_i, \quad \forall \; 0 \le i < m$.</li>
+    <li>$\displaystyle \text{mid}_i = \sum_{\substack{j = 1 \\[3pt] l_j \le \text{all}_i+1 \\[3pt]  \text{all}_{i+1}-1 \le r_j}}^{n} 1$ : the number of segments $[l_j,r_j]$ containing all the points in $[\text{all}_i+1, \text{all}_{i+1}-1], \quad \forall \; 0 \le i < m-1$.</li>
 </ul><br>
 
 To efficiently build the $\text{end}$ and $\text{mid}$ arrays, follow the steps:
@@ -2420,12 +2505,15 @@ signed main() {
 <details>
 <summary data-type="solution">Solution</summary>
 <div class="spoiler-content">
-Let $\text{val}_i$ denote the value of plant $i$ after all $q$ operations. Formally, we can define $\text{val}_i$ as:
+Let us define:
+<ul>
+    <li>$\displaystyle \text{val}_i = \sum_{\substack{j=1 \\[3pt] l_j \le i \le r_j}}^qf(i-l_j+1)$: the value of plant $i$ after all $q$ operations.</li>
+</ul><br>
+
+Using the definition of $f(x)$, we can rewrite the expression for $\text{val}_i$ as:
+
 $$
-\begin{aligned}
-& \sum_{\substack{j=1 \\ l_j \le i \le r_j}}^qf(i-l_j+1) \\[6pt]
-=\; & \sum_{\substack{j=1 \\ l_j \le i \le r_j}}^q{(i-l_j+1)\cdot \text{LSSB}_{i-l_j+1}}
-\end{aligned}
+\sum_{\substack{j=1 \\[3pt] l_j \le i \le r_j}}^q{(i-l_j+1)\cdot \text{LSSB}_{i-l_j+1}}
 $$
 
 where $\text{LSSB}_x$ is the value of the least significant set bit of $x$.<br><br>
@@ -2434,17 +2522,17 @@ Also, $1 \le i-l_j+1 \le n$ $\Rightarrow$ $\text{LSSB}_{i-l_j+1} \in \left\{2^0,
 
 $$
 \begin{aligned}
-& \sum_{k=0}^N\sum_{\substack{j=1 \\ l_j \le i \le r_j \\ \text{LSSB}_{i-l_j+1}=2^k}}^q{(i-l_j+1)\cdot 2^k} \\[6pt]
-=\; & \sum_{k=0}^N{2^k \cdot \sum_{\substack{j=1 \\ l_j \le i \le r_j \\ \text{LSSB}_{i-l_j+1}=2^k}}^q(i-l_j+1)} \\[6pt]
-=\; & \sum_{k=0}^N{2^k \cdot \left((i+1)\cdot \sum_{\substack{j=1 \\ l_j \le i \le r_j \\ \text{LSSB}_{i-l_j+1}=2^k}}^q1 - \sum_{\substack{j=1 \\ l_j \le i \le r_j \\ \text{LSSB}_{i-l_j+1}=2^k}}^ql_j\right)} \\[6pt]
+& \sum_{k=0}^N\sum_{\substack{j=1 \\[3pt] l_j \le i \le r_j \\[3pt] \text{LSSB}_{i-l_j+1}=2^k}}^q{(i-l_j+1)\cdot 2^k} \\[6pt]
+=\; & \sum_{k=0}^N{2^k \cdot \sum_{\substack{j=1 \\[3pt] l_j \le i \le r_j \\[3pt] \text{LSSB}_{i-l_j+1}=2^k}}^q(i-l_j+1)} \\[6pt]
+=\; & \sum_{k=0}^N{2^k \cdot \left((i+1)\cdot \sum_{\substack{j=1 \\[3pt] l_j \le i \le r_j \\[3pt] \text{LSSB}_{i-l_j+1}=2^k}}^q1 - \sum_{\substack{j=1 \\[3pt] l_j \le i \le r_j \\[3pt] \text{LSSB}_{i-l_j+1}=2^k}}^ql_j\right)} \\[6pt]
 \end{aligned}
 $$
 
 Let us define:
 
 <ul>
-    <li>$\displaystyle \text{cnt}_{k,i} = \sum_{\substack{j=1 \\ l_j \le i \le r_j \\ \text{LSSB}_{i-l_j+1}=2^k}}^q1$: the number of operations $[l_j,r_j]$ such that $l_j \le i \le r_j$ and $\text{LSSB}_{i-l_j+1}=2^k$, $\quad \forall \; 0 \le k \le N, 1 \le i \le n$.</li>
-    <li>$\displaystyle \text{sum}_{k,i} = \sum_{\substack{j=1 \\ l_j \le i \le r_j \\ \text{LSSB}_{i-l_j+1}=2^k}}^ql_j$: the sum of $l_j$ over all operations $[l_j,r_j]$ such that $l_j \le i \le r_j$ and $\text{LSSB}_{i-l_j+1}=2^k$, $\quad \forall \; 0 \le k \le N, 1 \le i \le n$.</li>
+    <li>$\displaystyle \text{cnt}_{k,i} = \sum_{\substack{j=1 \\[3pt] l_j \le i \le r_j \\[3pt] \text{LSSB}_{i-l_j+1}=2^k}}^q1$: the number of operations $[l_j,r_j]$ such that $l_j \le i \le r_j$ and $\text{LSSB}_{i-l_j+1}=2^k$, $\quad \forall \; 0 \le k \le N, 1 \le i \le n$.</li>
+    <li>$\displaystyle \text{sum}_{k,i} = \sum_{\substack{j=1 \\[3pt] l_j \le i \le r_j \\[3pt] \text{LSSB}_{i-l_j+1}=2^k}}^ql_j$: the sum of $l_j$ over all operations $[l_j,r_j]$ such that $l_j \le i \le r_j$ and $\text{LSSB}_{i-l_j+1}=2^k$, $\quad \forall \; 0 \le k \le N, 1 \le i \le n$.</li>
 </ul><br>
 
 We can rewrite the expression for $\text{val}_i$ as:
@@ -2499,7 +2587,7 @@ To efficiently build the $\text{cnt}$ and $\text{sum}$ arrays, follow the steps:
     </li>
 </ul><br>
 
-<b>Time Complexity:</b> $O((n+q) \log n)$
+<b>Time Complexity:</b> $O(\sum{(n+q) \log n})$
 
 </div>
 </details>
@@ -2761,7 +2849,26 @@ signed main() {
 <details>
 <summary data-type="solution">Solution</summary>
 <div class="spoiler-content">
-To be added.
+Let us define:
+<ul>
+    <li>$\displaystyle \text{val}_{t,i,j} = \sum_{\substack{k=1 \\[3pt] 1 \le x_k \le i \\[3pt] 1 \le y_k \le j}}^n{s_{k,t}}$: the total brightness of stars lying in the rectangle defined by $(1,1)$ and $(i,j)$ at moment $t$, $\quad \forall \; 0 \le t \le c, 1 \le i,j \le N$ where $N = 10^2$.</li>
+</ul><br>
+
+where $s_{k,t}$ denotes the brightness of the $k^{th}$ star at moment $t$, and is equal to $(s_k + t) \bmod (c+1)$.<br><br>
+
+Thus, we can build the $\text{val}$ array as follows:
+
+<ul>
+    <li>Initialize with all zeros.</li>
+    <li>For every star $(x_i, y_i, s_i)$, update $\text{val}_{t,x_i,y_i} \gets \text{val}_{t,x_i,y_i} + (s_i+t) \bmod (c+1), \quad \forall \; 0 \le t \le c$</li>
+    <li>Replace the $\text{val}$ array with its prefix sum array.</li>
+</ul><br>
+
+First update $t_i \gets t_i \bmod (c + 1)$, then the total brightness of stars lying in the rectangle defined by $(x_{1i},y_{1i})$ and $(x_{2i},y_{2i})$ at moment $t_i$ is given by:
+$$\text{pre}_{t_i,x_{2i},y_{2i}} - \text{pre}_{t_i,x_{1i}-1,y_{2i}} - \text{pre}_{t_i,x_{2i},y_{1i}-1} + \text{pre}_{t_i,x_{1i}-1,y_{1i}-1}$$
+
+<b>Time Complexity:</b> $O(c \cdot N^2 + q)$
+
 </div>
 </details>
 <details>
@@ -2782,21 +2889,21 @@ signed main() {
     int n, q, c;
     cin >> n >> q >> c;
 
-    vector pre(c + 1, vector(N + 1, vector<int>(N + 1)));
+    vector val(c + 1, vector(N + 1, vector<int>(N + 1)));
     for (int i = 1; i <= n; i++) {
         int x, y, s;
         cin >> x >> y >> s;
         for (int t = 0; t <= c; t++)
-            pre[t][x][y] += (s + t) % (c + 1);
+            val[t][x][y] += (s + t) % (c + 1);
     }
 
     for (int t = 0; t <= c; t++)
         for (int i = 1; i <= N; i++)
             for (int j = 1; j <= N; j++)
-                pre[t][i][j] += pre[t][i - 1][j] + pre[t][i][j - 1] - pre[t][i - 1][j - 1];
+                val[t][i][j] += val[t][i - 1][j] + val[t][i][j - 1] - val[t][i - 1][j - 1];
 
     auto query = [&](int t, int x1, int y1, int x2, int y2) {
-        return pre[t][x2][y2] - pre[t][x1 - 1][y2] - pre[t][x2][y1 - 1] + pre[t][x1 - 1][y1 - 1];
+        return val[t][x2][y2] - val[t][x1 - 1][y2] - val[t][x2][y1 - 1] + val[t][x1 - 1][y1 - 1];
     };
 
     for (int i = 1; i <= q; i++) {
@@ -2892,24 +2999,27 @@ signed main() {
 <details>
 <summary data-type="solution">Solution</summary>
 <div class="spoiler-content">
-Build an array $\text{val}$, where $\text{val}_{i,j}$ denotes the value of $a_{i,j}$ after all $q$ queries assuming that $a_{i,j} = 0$ initially.<br><br>
+Let us define:
+<ul>
+    <li>$\displaystyle \text{val}_{i,j} = \bigoplus_{\substack{k=1 \\[3pt] x_{1k} \le i \le x_{2k} \\[3pt] y_{1k} \le j \le y_{2k}}}^q1$: the value of $a_{i,j}$ after all $q$ queries assuming that $a_{i,j} = 0$ initially, $\quad \forall \; 1 \le i \le n, 1 \le j \le m$.</li>
+</ul><br>
 
 To efficiently build the the $\text{val}$ array, follow the steps:
 
 <ul>
     <li>Initialize with all zeros.</li>
-    <li>For every query $x_1,y_1,x_2,y_2$, update:
+    <li>For every query $x_{1i},y_{1i},x_{2i},y_{2i}$, update:
         <ul>
-            <li>$\text{val}_{x_1,y_1} \gets \text{val}_{x_1,y_1} \oplus 1$</li>
-            <li>$\text{val}_{x_1,y_2+1} \gets \text{val}_{x_1,y_2+1} \oplus 1$</li>
-            <li>$\text{val}_{x_2+1,y_1} \gets \text{val}_{x_2+1,y_1} \oplus 1$</li>
-            <li>$\text{val}_{x_2+1,y_2+1} \gets \text{val}_{x_2+1,y_2+1} \oplus 1$</li>
+            <li>$\text{val}_{x_{1i},y_{1i}} \gets \text{val}_{x_{1i},y_{1i}} \oplus 1$</li>
+            <li>$\text{val}_{x_{1i},y_{2i}+1} \gets \text{val}_{x_{1i},y_{2i}+1} \oplus 1$</li>
+            <li>$\text{val}_{x_{2i}+1,y_{1i}} \gets \text{val}_{x_{2i}+1,y_{1i}} \oplus 1$</li>
+            <li>$\text{val}_{x_{2i}+1,y_{2i}+1} \gets \text{val}_{x_{2i}+1,y_{2i}+1} \oplus 1$</li>
         </ul>
     </li>
     <li>After processing all the queries, replace $\text{val}$ array by its prefix xor array.</li>
 </ul><br>
 
-The value of $a_{i,j}$ after all $q$ queries is given by $a_{i,j} \oplus \text{val}_{i,j}$.<br><br>
+After all $q$ queries, the value at cell $(i,j)$ is given by $a_{i,j} \oplus \text{val}_{i,j}$.<br><br>
 
 <b>Time Complexity:</b> $O(n\cdot m)$
 
