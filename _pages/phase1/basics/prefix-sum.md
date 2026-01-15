@@ -29,12 +29,94 @@ $$
 The most common application of this array is computing the sum of elements in a subarray $[l,r]$ of the array $a$ in $O(1)$ time using the fact:
 
 $$
-\sum_{i=l}^ra_i \\[6pt]
-= \sum_{i=1}^ra_i - \sum_{i=1}^{l-1}a_i \\[6pt]
+\sum_{j=l}^ra_j \\[6pt]
+= \sum_{j=1}^ra_j - \sum_{j=1}^{l-1}a_j \\[6pt]
 = \text{pre}_r - \text{pre}_{l-1}
 $$
 
 ### Learn Through Problems
+
+<details>
+<summary><a href="https://cses.fi/problemset/task/1646" target="_blank"><b>CSES - Static Range Sum Queries</b></a></summary>
+<div class="spoiler-content">
+You are given $n$ integers $a_1,a_2,\ldots,a_n$ and $q$ queries of the form: compute the sum of values in range $[l_i,r_i]$.<br><br>
+
+<b>Input</b><br>
+The first line contains integers $n \left(1 \le n \le 2\cdot10^5\right)$ and $q \left(1 \le q \le 2\cdot10^5\right)$.<br>
+The next line contains $n$ integers $a_1,a_2,\ldots,a_n \left(1 \le a_i \le 10^9\right)$.<br>
+The next $q$ lines contain integers $l_i$ and $r_i$ $(1 \le l_i \le r_i \le n)$.<br><br>
+
+<b>Output</b><br>
+For each query, print the sum of values in range $[l_i,r_i]$.<br><br>
+
+<div class="sample-block">
+    <b>Sample Input</b>
+    <button class="copy-btn" onclick="copySample(this)">Copy</button>
+  <pre class="sample-io">
+8 4
+3 2 4 5 1 1 5 3
+2 4
+5 6
+1 8
+3 3</pre>
+</div>
+
+<div class="sample-block">
+    <b>Sample Output</b>
+    <button class="copy-btn" onclick="copySample(this)">Copy</button>
+  <pre class="sample-io">
+11
+2
+24
+4</pre>
+</div><br>
+
+<details>
+<summary data-type="solution">Solution</summary>
+<div class="spoiler-content">
+Build the prefix sum array $\text{pre}$ of the array $a$. The sum of values in range $[l_i,r_i]$ is given by $\text{pre}_{r_i} - \text{pre}_{l_i-1}.$<br><br>
+
+<b>Time Complexity:</b> $O(n)$
+
+</div>
+
+</details>
+
+<details>
+<summary data-type="code">Code (C++)</summary>
+
+<pre class="spoiler-code"><code class="cpp"><script type="text/plain">#include <bits/stdc++.h>
+#define int long long int
+#define endl "\n"
+#define fastio() ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(__null);
+
+using namespace std;
+
+signed main() {
+    fastio()
+
+    int n, q;
+    cin >> n >> q;
+
+    vector<int> pre(n + 1);
+    for (int i = 1; i <= n; i++) {
+        cin >> pre[i];
+        pre[i] += pre[i - 1];
+    }
+
+    while (q--) {
+        int l, r;
+        cin >> l >> r;
+        cout << pre[r] - pre[l - 1] << endl;
+    }
+
+    return 0;
+}
+</script></code></pre>
+
+</details>
+</div>
+</details>
 
 <details>
 <summary><a href="https://cses.fi/problemset/task/1661" target="_blank"><b>CSES - Subarray Sums II</b></a></summary>
@@ -326,14 +408,8 @@ signed main() {
         pre[i] += pre[i - 1];
     }
 
-    priority_queue<int, vector<int>, greater<int>> pq;
-    for (int i = 1; i < n; i++)
-        pq.push(pre[i]);
-
-    int ans = k * pre[n];
-    for (int i = 1; i <= k - 1; i++)
-        ans -= pq.top(), pq.pop();
-    cout << ans << endl;
+    nth_element(pre.begin() + 1, pre.begin() + k, pre.end());
+    cout << k * pre[n] - accumulate(pre.begin() + 1, pre.begin() + k, 0LL) << endl;
 
     return 0;
 }
@@ -408,7 +484,7 @@ The logic behind this technique (known as <b>Difference Array</b>) is explained 
 
 <ul>
     <li>When we perform $\text{freq}_{l_i} \gets \text{freq}_{l_i}+1$ and later replace the $\text{freq}$ array by its prefix sum array, the frequency of all temperatures $\ge l_i$ gets increased by $1$.</li>
-    <li>However, for an interval $[l_i,r_i]$, we want to increase the frequency only for tempreatures lying in the range $[l_i,r_i]$.</li>
+    <li>However, for an interval $[l_i,r_i]$, we want to increase the frequency only for temperatures lying in the range $[l_i,r_i]$.</li>
     <li>To stop this increment after $r_i$, we perform $\text{freq}_{r_i+1} \gets \text{freq}_{r_i+1}-1$ and later replacing the $\text{freq}$ array by its prefix sum cancels the earlier increment for all temperatures $\ge r_i+1$.</li>
     <li>As a result, the net effect is that only temperatures in the range $[l_i,r_i]$ have their frequency increased by $1$, while other temperatures remain unaffected.</li>
 </ul><br>
@@ -426,7 +502,7 @@ $$
 
 Build the prefix sum array $\text{pre}$ of the array $c$. The number of admissible integer temperatures in the range $[a,b]$ is given by $\text{pre}_b - \text{pre}_{a-1}$.<br><br>
 
-<b>Time Complexity:</b> $O(N + n)$
+<b>Time Complexity:</b> $O(N + n + q)$
 
 </div>
 
@@ -570,7 +646,7 @@ To efficiently build the $\text{cnt}$ and $\text{sum}$ arrays, follow the steps:
     <li>After processing all the intervals, replace the $\text{cnt}$ and $\text{sum}$ arrays by their prefix sum arrays.</li>
 </ul><br>
 
-<b>Time Complexity:</b> $O\left(\sum n\right)$
+<b>Time Complexity:</b> $O\left(\sum (n+q)\right)$
 
 </div>
 
@@ -684,7 +760,7 @@ We will handle these two parts separately using arrays $\text{end}$ and $\text{m
     <li>$\displaystyle \text{mid}_i = \sum_{\substack{j = 1 \\[3pt] l_j \le \text{all}_i+1 \\[3pt]  \text{all}_{i+1}-1 \le r_j}}^{n} c_j$ : the total cost of all services active on every day in $[\text{all}_i+1, \text{all}_{i+1}-1], \quad \forall \; 0 \le i < m-1$.</li>
 </ul><br>
 
-Basically, the array $\text{end}$ handles individual important days (i.e., days that are either start or end of a service interval) and the array $\text{mid}$ handles continuous stretches (i.e., days that are neither start not end of any service interval and hence have identical cost). <br><br>
+Basically, the array $\text{end}$ handles individual important days (i.e., days that are either start or end of a service interval) and the array $\text{mid}$ handles continuous stretches (i.e., days that are neither start nor end of any service interval and hence have identical cost). <br><br>
 
 To efficiently build the $\text{end}$ and $\text{mid}$ arrays, follow the steps:
 
@@ -701,10 +777,10 @@ To efficiently build the $\text{end}$ and $\text{mid}$ arrays, follow the steps:
     <li>After processing all the services, replace the $\text{end}$ and $\text{mid}$ arrays by their prefix sum arrays.</li>
 </ul><br>
 
-Without considering the subscription plan that costs $C$ yen per day, the total cost required to use all services can be written as:
+Without considering the subscription plan that costs $C$ yen per day, the total cost required to use all services is given by:
 $$\sum_{i=0}^{m-1}\text{end}_i + \sum_{i=0}^{m-2}\text{mid}_i\cdot\left(\text{all}_{i+1}-\text{all}_i-1\right)$$
 
-Considering the subscription plan that costs $C$ yen per day, the minimum total cost required to use all services can be written as:
+Considering the subscription plan that costs $C$ yen per day, the minimum total cost required to use all services is given by:
 $$\sum_{i=0}^{m-1}\min\left(\text{end}_i, C\right) + \sum_{i=0}^{m-2}\min\left(\text{mid}_i, C\right)\cdot\left(\text{all}_{i+1}-\text{all}_i-1\right)$$
 
 <b>Time Complexity:</b> $O(n\log n)$
@@ -829,12 +905,12 @@ $$
 
 where $\displaystyle \text{sum}_j = \sum_{\substack{l=1 \\[3pt] \text{pre}_{l-1} = j}}^il$, which can be computed by iterating on $l$ from $1$ to $i$.<br><br>
 
-Also, $-n \le \text{pre}_k \le n \left(\because \left|b_k\right| \leq 1\right)$ implies that we have to compute $\text{sum}_j$ for $-n \le j \le n$. To avoid using a map, we can do the following modification to the expression of the inner summation:
+Also, $-n \le \text{pre}_k \le n \left(\because \left|b_k\right| \leq 1\right)$ implies that we have to compute $\text{sum}_j$ for $-n \le j \le n$. To avoid using a map, we can do the following modification to the expression for the inner summation:
 $$\sum_{r=i}^nr\cdot\text{sum}_{\text{pre}_r+n}$$
 
 where $\displaystyle \text{sum}_j = \sum_{\substack{l=1 \\[3pt] \text{pre}_{l-1}+n = j}}^il$. Thus, we have to compute $\text{sum}_j$ for $0 \le j \le 2\cdot n$ which can be stored in an array.<br><br>
 
-The final expression for the answer can be written as:
+The final expression for the answer is given by:
 $$\sum_{i=1}^na_i\cdot \sum_{r=i}^nr\cdot\text{sum}_{\text{pre}_r+n}$$
 
 <b>Time Complexity:</b> $O(n^2)$
@@ -948,27 +1024,27 @@ $$
 \end{aligned}
 $$
 
-Simplifying the expression of $S_1$:
+Simplifying the expression for $S_1$:
 
 $$
 \sum_{i = 1}^n\sum_{j = i}^n\text{pre}_j^3 = \sum_{j = 1}^n\sum_{i = 1}^j\text{pre}_j^3 = \sum_{j=1}^n\text{pre}_j^3\cdot\sum_{i=1}^j1
 = \sum_{j=1}^n\text{pre}_j^3\cdot j
 $$
 
-Simplifying the expression of $S_1$:
+Simplifying the expression for $S_2$:
 
 $$
 \sum_{i = 1}^n\sum_{j = i}^n\text{pre}_{i-1}^3 = \sum_{i=1}^n\text{pre}_{i-1}^3\cdot\sum_{j=i}^n1 = \sum_{i=1}^n\text{pre}_{i-1}^3\cdot(n-i+1)
 $$
 
-Simplifying the expression of $S_3$:
+Simplifying the expression for $S_3$:
 
 $$
 \sum_{i = 1}^n\sum_{j = i}^n\text{pre}_j^2\cdot\text{pre}_{i-1} = \sum_{j = 1}^n\sum_{i = 1}^j\text{pre}_j^2\cdot\text{pre}_{i-1}
 = \sum_{j = 1}^n\text{pre}_j^2\cdot\sum_{i = 1}^j\text{pre}_{i-1} = \sum_{j = 1}^n\text{pre}_j^2\cdot\text{pre2}_{j-1}
 $$
 
-Simplifying the expression of $S_4$:
+Simplifying the expression for $S_4$:
 
 $$
 \sum_{i = 1}^n\sum_{j = i}^n\text{pre}_j\cdot\text{pre}_{i-1}^2 = \sum_{i = 1}^n\text{pre}_{i-1}^2\cdot\sum_{j = i}^n\text{pre}_j
@@ -1264,7 +1340,7 @@ Build the prefix sum array $\text{pre}$ of the grid $a$ considering $a_{i,j} = 1
 The number of trees inside the rectangle defined by $(y_1,x_1)$ and $(y_2,x_2)$ is given by:
 $$\text{pre}_{y_2,x_2} - \text{pre}_{y_1-1,x_2} - \text{pre}_{y_2,x_1-1} + \text{pre}_{y_1-1,x_1-1}$$
 
-<b>Time Complexity:</b> $O(n^2)$
+<b>Time Complexity:</b> $O(n^2 + q)$
 
 </div>
 
@@ -1373,7 +1449,7 @@ To efficiently build the $\text{val}$ array, follow the steps:
 
 This is the <b>Difference Array</b> technique extended to 2D Prefix Sum. The logic of this extension is left as an exercise for you.<br><br>
 
-<b>Time Complexity:</b> $O(n\cdot m)$
+<b>Time Complexity:</b> $O(n\cdot m + q)$
 
 </div>
 
@@ -1424,6 +1500,62 @@ signed main() {
 ### Practice Problems
 
 <ul>
+<li>
+<a href="https://cses.fi/problemset/task/1650" target="_blank">CSES - Range XOR Queries</a>
+<button class="solution-toggle-btn" onclick="toggleSolution(this)">Show Solution</button>
+<div class="practice-solution-container" style="display: none;">
+<details>
+<summary data-type="solution">Solution</summary>
+<div class="spoiler-content">
+Build the prefix xor array $\text{pre}$ of the array $a$ using the following relations:
+$$
+\begin{aligned}
+& \text{pre}_0 = 0 \\[6pt]
+& \text{pre}_i = \text{pre}_{i-1} \oplus a_i, \quad \forall \; 1 \le i \le n
+\end{aligned}
+$$
+
+The xor of values in range $[a,b]$ is given by $\text{pre}_b \oplus \text{pre}_{a-1}.$<br><br>
+
+<b>Time Complexity:</b> $O(n+q)$
+
+</div>
+</details>
+<details>
+<summary data-type="code">Code (C++)</summary>
+
+<pre class="spoiler-code"><code class="cpp"><script type="text/plain">#include <bits/stdc++.h>
+#define int long long int
+#define endl "\n"
+#define fastio() ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(__null);
+
+using namespace std;
+
+signed main() {
+    fastio()
+
+    int n, q;
+    cin >> n >> q;
+
+    vector<int> pre(n + 1);
+    for (int i = 1; i <= n; i++) {
+        cin >> pre[i];
+        pre[i] ^= pre[i - 1];
+    }
+
+    while (q--) {
+        int a, b;
+        cin >> a >> b;
+        cout << (pre[b] ^ pre[a - 1]) << endl;
+    }
+
+    return 0;
+}
+</script></code></pre>
+
+</details>
+</div>
+</li>
 <li>
 <a href="https://cses.fi/problemset/task/1662" target="_blank">CSES - Subarray Divisibility</a>
 <button class="solution-toggle-btn" onclick="toggleSolution(this)">Show Solution</button>
@@ -1582,7 +1714,7 @@ signed main() {
 <div class="spoiler-content">
 Let us define:
 <ul>
-    <li>$\displaystyle \text{freq}_i = \sum_{\substack{j = 1 \\[3pt] l_j \le i \le r_j}}^m1$: the number of turrets which guard the castle wall $i$, $\quad \forall \; 1 \le i \le n$.</li>
+    <li>$\displaystyle \text{freq}_i = \sum_{\substack{j = 1 \\[3pt] l_j \le i \le r_j}}^M1$: the number of turrets which guard the castle wall $i$, $\quad \forall \; 1 \le i \le N$.</li>
 </ul><br>
 
 To efficiently build the $\text{freq}$ array, follow the steps:
@@ -1601,9 +1733,9 @@ To efficiently build the $\text{freq}$ array, follow the steps:
 For a castle wall $i$, the minimum number of turrets that need to be destroyed so that it is not guarded by any turret is $\text{freq}_i$.<br><br>
 
 Thus, the minimum number of turrets that need to be destroyed so that at least one castle wall is not guarded by any turret is given by:
-$$\min_{1 \le i \le n}\text{freq}_i$$
+$$\min_{1 \le i \le N}\text{freq}_i$$
 
-<b>Time Complexity:</b> $O(n)$
+<b>Time Complexity:</b> $O(N+M)$
 
 </div>
 </details>
@@ -1773,7 +1905,7 @@ signed main() {
 Let us define:
 <ul>
     <li>$\displaystyle \text{freq}_i = \sum_{\substack{j=1 \\[3pt] x_j \le i \le y_j}}^k1$: the number of times operation $i$ needs to be applied, $\quad \forall \; 1 \le i \le m$.</li>
-    <li>$\displaystyle \text{sum}_i = \sum_{\substack{j=1 \\[3pt] l_j \le i \le r_j}}^md_j$: the total value added to $a_i$ after applying all $m$ operations, $\quad \forall \; 1 \le i \le n$.</li>
+    <li>$\displaystyle \text{sum}_i = \sum_{\substack{j=1 \\[3pt] l_j \le i \le r_j}}^md_j$: the total value added to $a_i$ after applying all operations, $\quad \forall \; 1 \le i \le n$.</li>
 </ul><br>
 
 To efficiently build the $\text{freq}$ array, follow the steps:
@@ -1802,9 +1934,9 @@ To efficiently build the $\text{sum}$ array, follow the steps:
     <li>After processing all the operations, replace the $\text{sum}$ array with its prefix sum array.</li>
 </ul><br>
 
-After applying all $m$ operations, the value of element at index $i$ is given by $a_i + \text{sum}_i$.<br><br>
+After applying all operations, the value of element at index $i$ is given by $a_i + \text{sum}_i$.<br><br>
 
-<b>Time Complexity:</b> $O(n)$
+<b>Time Complexity:</b> $O(n+m+k)$
 
 </div>
 </details>
@@ -2087,12 +2219,9 @@ signed main() {
             int j = 0;
             vector<int> pre(n + 1, n), freq(2 * n + 1);
             for (int i = 1; i <= n; i++) {
-                if (a[i] == med) {
-                    while (j < i) {
-                        freq[pre[j]]++;
-                        j++;
-                    }
-                }
+                if (a[i] == med)
+                    while (j < i)
+                        freq[pre[j++]]++;
 
                 pre[i] = pre[i - 1] + (a[i] >= med ? 1 : -1);
                 bad += freq[pre[i]];
@@ -2384,7 +2513,7 @@ For each compressed index $i$, there are two distinct parts of points to conside
 
 <ul>
     <li>The exact point $\text{all}_i$.</li>
-    <li>The continuous block of points $[\text{all}_i+1, \text{all}_{i+1}-1]$.</li>
+    <li>All the points in $[\text{all}_i+1, \text{all}_{i+1}-1]$.</li>
 </ul><br>
 
 We will handle these two parts separately using arrays $\text{end}$ and $\text{mid}$ respectively:
@@ -2518,7 +2647,7 @@ $$
 
 where $\text{LSSB}_x$ is the value of the least significant set bit of $x$.<br><br>
 
-Also, $1 \le i-l_j+1 \le n$ $\Rightarrow$ $\text{LSSB}_{i-l_j+1} \in \left\{2^0, 2^1, \ldots, 2^N\right\}$ where $N=\left\lfloor \log n \right\rfloor$. Using the <b>Contribution Technique</b>, we can rewrite the expression of $\text{val}$ as:
+Also, $1 \le i-l_j+1 \le n$ $\Rightarrow$ $\text{LSSB}_{i-l_j+1} \in \left\{2^0, 2^1, \ldots, 2^N\right\}$ where $N=\left\lfloor \log n \right\rfloor$. Using the <b>Contribution Technique</b>, we can rewrite the expression for $\text{val}_i$ as:
 
 $$
 \begin{aligned}
@@ -2538,7 +2667,7 @@ Let us define:
 We can rewrite the expression for $\text{val}_i$ as:
 $$\sum_{k=0}^N{2^k \cdot \left((i+1)\cdot \text{cnt}_{k,i} - \text{sum}_{k,i}\right)}$$
 
-<span style="color:Brown;"><b>FACT:</b></span> For any positive integer $x$, $\text{LSSB}_x$ is $2^k$ $(k \ge 0)$ iff $x$ is an odd multiple of $2^k$; formally $\exists\; m \in {\mathbb{Z}}_{\geq 0}$ such that:
+<span style="color:Brown;"><b>FACT:</b></span> For any positive integer $x$, $\text{LSSB}_x = 2^k$ $(k \ge 0)$ iff $x$ is an odd multiple of $2^k$; formally $\exists\; m \in {\mathbb{Z}}_{\geq 0}$ such that:
 $$x = 2^k \cdot (2\cdot m + 1) = 2^{k+1} \cdot m + 2^k$$
 
 Using this fact, we can say that:
@@ -2579,7 +2708,7 @@ To efficiently build the $\text{cnt}$ and $\text{sum}$ arrays, follow the steps:
             <li>$\text{sum}_{k,end+d} \gets \text{sum}_{k,end+d} - l_j, \quad \forall \; 0 \le k \le N$</li>
         </ul>
     </li>
-    <li>After processing all operations, first iterate on $k$ from $0$ to $N$, then iterate on $i$ from $d = 2^{k+1}$ to $n$, update:
+    <li>After processing all the operations, first iterate on $k$ from $0$ to $N$, then iterate on $i$ from $d = 2^{k+1}$ to $n$, update:
         <ul>
             <li>$\text{cnt}_{k,i} \gets \text{cnt}_{k,i} + \text{cnt}_{k,i-d}$</li>
             <li>$\text{sum}_{k,i} \gets \text{sum}_{k,i} + \text{sum}_{k,i-d}$</li>
@@ -2587,7 +2716,7 @@ To efficiently build the $\text{cnt}$ and $\text{sum}$ arrays, follow the steps:
     </li>
 </ul><br>
 
-<b>Time Complexity:</b> $O(\sum{(n+q) \log n})$
+<b>Time Complexity:</b> $O(\sum((n+q) \log n))$
 
 </div>
 </details>
@@ -2729,7 +2858,65 @@ signed main() {
 <details>
 <summary data-type="solution">Solution</summary>
 <div class="spoiler-content">
-To be added.
+Let us define:
+<ul>
+    <li>$\displaystyle \text{pre}_i = \sum_{\substack{j=1 \\[3pt] A_j \le i}}^N1$: the number of integers $\le i$ present in the array $A$, $\quad \forall \; 1 \le i \le M$ where $M = 10^6$.</li>
+    <li>$\text{freq}_i = \text{pre}_i - \text{pre}_{i-1}$: the number of times integer $i$ is present in the array $A$, $\quad \forall \; 1 \le i \le M$.</li>
+</ul><br>
+
+Using the <b>Contribution Technique</b>, we can rewrite the given expression as:
+
+$$
+\sum_{i=1}^M{\text{freq}_i\cdot \sum_{j=i+1}^M\left\lfloor \frac{j}{i} \right\rfloor} + \sum_{i=1}^M\left(\begin{array}{cc} \text{freq}_i \\ 2 \\  \end{array}\right)
+$$
+
+Using the <b>Contribution Technique</b> again, we can rewrite the given expression as:
+
+$$
+\begin{aligned}
+& \sum_{i=1}^M{\text{freq}_i\cdot \sum_{k=1}^{\left\lfloor \frac{M}{i} \right\rfloor}\sum_{\substack{j=i+1 \\[3pt] \left\lfloor \frac{j}{i} \right\rfloor = k}}^Mk} + \sum_{i=1}^M\left(\begin{array}{cc} \text{freq}_i \\ 2 \\  \end{array}\right) \\[6pt]
+=\; & \sum_{i=1}^M{\text{freq}_i\cdot \sum_{k=1}^{\left\lfloor \frac{M}{i} \right\rfloor}{k \cdot \sum_{\substack{j=i+1 \\[3pt] \left\lfloor \frac{j}{i} \right\rfloor = k}}^M1}} + \sum_{i=1}^M\left(\begin{array}{cc} \text{freq}_i \\ 2 \\  \end{array}\right)
+\end{aligned}
+$$
+
+We can simplify the floor condition as:
+
+$$
+\left\lfloor \frac{j}{i} \right\rfloor = k \quad \Rightarrow k \le \frac{j}{i} < k+1 \quad \Rightarrow i\cdot k \le j \le i\cdot (k+1) - 1
+$$
+
+Thus, for the innermost summation, we have the following two inequalities for $j$:
+
+$$
+\begin{aligned}
+& i+1 \le j \le M \\[6pt]
+& i\cdot k \le j \le i\cdot (k+1) - 1
+\end{aligned}
+$$
+
+Combining these inequalities gives:
+$$\max(i+1,i\cdot k) \le j \le \min(M,i\cdot (k+1)-1)$$
+
+Let us define:
+
+<ul>
+    <li>$l_{i,k} = \max(i+1,i\cdot k), \quad \forall \; 1 \le i \le M, 1 \le k \le \left\lfloor \frac{M}{i} \right\rfloor$</li>
+    <li>$r_{i,k} = \min(M,i\cdot (k+1)-1), \quad \forall \; 1 \le i \le M, 1 \le k \le \left\lfloor \frac{M}{i} \right\rfloor$</li>
+</ul><br>
+
+We can rewrite the given expression as:
+
+$$
+\begin{aligned}
+& \sum_{i=1}^M{\text{freq}_i\cdot \sum_{k=1}^{\left\lfloor \frac{M}{i} \right\rfloor}{k \cdot \sum_{j = l_{i,k}}^{r_{i,k}}1}} + \sum_{i=1}^M\left(\begin{array}{cc} \text{freq}_i \\ 2 \\  \end{array}\right) \\[6pt]
+=\; & \sum_{i=1}^M{\text{freq}_i\cdot \sum_{k=1}^{\left\lfloor \frac{M}{i} \right\rfloor}{k \cdot \left(\text{pre}_{r_{i,k}} - \text{pre}_{l_{i,k}-1}\right)}} + \sum_{i=1}^M\left(\begin{array}{cc} \text{freq}_i \\ 2 \\  \end{array}\right)
+\end{aligned}
+$$
+
+which can be computed in the given time limit as $\displaystyle \sum_{i=1}^M{\left\lfloor \frac{M}{i} \right\rfloor} = O(M \log M)$.<br><br>
+
+<b>Time Complexity:</b> $O(N + M\log M)$
+
 </div>
 </details>
 <details>
@@ -2742,33 +2929,36 @@ To be added.
 
 using namespace std;
 
-const int N = (int)1e6;
+const int M = (int)1e6;
 
 signed main() {
     fastio()
 
-    int n;
-    cin >> n;
+    int N;
+    cin >> N;
 
-    vector<int> pre(N + 1);
-    for (int i = 1; i <= n; i++) {
+    vector<int> pre(M + 1);
+    for (int i = 1; i <= N; i++) {
         int x;
         cin >> x;
         pre[x]++;
     }
 
-    for (int i = 1; i <= N; i++)
+    for (int i = 1; i <= M; i++)
         pre[i] += pre[i - 1];
 
     int ans = 0;
-    for (int d = 1; d <= N; d++) {
-        int cur = pre[d] - pre[d - 1];
-        for (int val = 1; val <= N / d; val++) {
-            int l = max(d + 1, val * d), r = min(N, (val + 1) * d - 1);
-            int cnt = pre[r] - pre[l - 1];
-            ans += val * cur * cnt;
+    for (int i = 1; i <= M; i++) {
+        int freq = pre[i] - pre[i - 1];
+        if(!freq)
+            continue;
+
+        for (int k = 1; k <= M / i; k++) {
+            int l = max(i + 1, i * k), r = min(M, i * (k + 1) - 1);
+            ans += freq * k * (pre[r] - pre[l - 1]);
         }
-        ans += (cur * (cur - 1)) / 2;
+
+        ans += (freq * (freq - 1)) / 2;
     }
 
     cout << ans << endl;
@@ -3021,7 +3211,7 @@ To efficiently build the the $\text{val}$ array, follow the steps:
 
 After all $q$ queries, the value at cell $(i,j)$ is given by $a_{i,j} \oplus \text{val}_{i,j}$.<br><br>
 
-<b>Time Complexity:</b> $O(n\cdot m)$
+<b>Time Complexity:</b> $O(n\cdot m + q)$
 
 </div>
 </details>
