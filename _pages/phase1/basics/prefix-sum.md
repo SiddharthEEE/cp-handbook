@@ -848,7 +848,7 @@ signed main() {
 <summary><a href="https://csacademy.com/contest/archive/task/subarray-medians/statement/" target="_blank"><b>CSAcademy - Subarray Medians</b></a></summary>
 <div class="spoiler-content">
 You are given a permutation $a$ of size $n$. Compute the value of the expression:
-$$\sum_{\substack{1 \le l \le r \le n \\ (r - l)\ \text{even}}}l \cdot r \cdot \text{median}(l,r)$$
+$$\sum_{\substack{1 \le l \le r \le n \\[3pt] (r - l)\ \text{even}}}l \cdot r \cdot \text{median}(l,r)$$
 
 where $\text{median}(l,r)$ denotes the median of the subarray $[l,r]$.<br><br>
 
@@ -877,7 +877,7 @@ Print the value of the given expression.<br><br>
 <details>
 <summary data-type="solution">Solution</summary>
 <div class="spoiler-content">
-We can rewrite the given expression as:
+Using the <b>Contribution Technique</b>, we can rewrite the given expression as:
 $$
 \begin{aligned}
 & \sum_{i=1}^n\sum_{\substack{1 \le l \le i \le r \le n \\[3pt] (r - l)\ \text{even} \\[3pt] \text{median}(l,r)=a_i}}l \cdot r \cdot a_i \\[6pt]
@@ -2538,10 +2538,10 @@ To efficiently build the $\text{end}$ and $\text{mid}$ arrays, follow the steps:
     <li>After processing all the segments, replace the $\text{end}$ and $\text{mid}$ arrays by their prefix sum arrays.</li>
 </ul><br>
 
-Let $\text{ans} = $ the number of points in the intersection of any $k$ of the segments. Notice that if any point $j$ is contained in exactly $i$ segments, then its contribution to the value of $\text{ans}$ will be $\displaystyle \left(\begin{array}{cc} i \\ k \\  \end{array}\right) = \frac{i!}{k!\,(i-k)!}$. This is known as the <b>Contribution Technique</b>.<br><br>
+Let $\text{ans} = $ the number of points in the intersection of any $k$ of the segments. Notice that if any point $j$ is contained in exactly $i$ segments, then its contribution to the value of $\text{ans}$ will be $\displaystyle \left(\begin{array}{cc} i \\ k \\  \end{array}\right) = \frac{i!}{k!\,(i-k)!}$.<br><br>
 
-Thus, we can write the expression for $\text{ans}$ as:
-$$\sum_{\substack{i=0 \\ \text{end}_i \ge k}}^{m-1}\left(\begin{array}{cc} \text{end}_i \\ k \\  \end{array}\right) + \sum_{\substack{i=0 \\ \text{mid}_i \ge k}}^{m-2}\left(\begin{array}{cc} \text{mid}_i \\ k \\  \end{array}\right)\cdot (\text{all}_{i+1}-\text{all}_i-1)$$
+Using the <b>Contribution Technique</b>, we can write the expression for $\text{ans}$ as:
+$$\sum_{\substack{i=0 \\[3pt] \text{end}_i \ge k}}^{m-1}\left(\begin{array}{cc} \text{end}_i \\ k \\  \end{array}\right) + \sum_{\substack{i=0 \\[3pt] \text{mid}_i \ge k}}^{m-2}\left(\begin{array}{cc} \text{mid}_i \\ k \\  \end{array}\right)\cdot (\text{all}_{i+1}-\text{all}_i-1)$$
 
 <b>Time Complexity:</b> $O(n \log n)$
 
@@ -2670,13 +2670,13 @@ $$\sum_{k=0}^N{2^k \cdot \left((i+1)\cdot \text{cnt}_{k,i} - \text{sum}_{k,i}\ri
 <span style="color:Brown;"><b>FACT:</b></span> For any positive integer $x$, $\text{LSSB}_x = 2^k$ $(k \ge 0)$ iff $x$ is an odd multiple of $2^k$; formally $\exists\; m \in {\mathbb{Z}}_{\geq 0}$ such that:
 $$x = 2^k \cdot (2\cdot m + 1) = 2^{k+1} \cdot m + 2^k$$
 
-Using this fact, we can say that:
+Using this fact, we can simplify the $\text{LSSB}$ condition as:
 
 $$
 \begin{aligned}
 & \text{LSSB}_{i-l_j+1} = 2^k \\[6pt]
-\Leftrightarrow\; & i-l_j+1 \in \{2^{k+1}\cdot m+2^k \mid m \in \mathbb{Z}_{\geq 0}\} \\[6pt]
-\Leftrightarrow\; & i \in \{2^{k+1}\cdot m+2^k+l_j-1 \mid m \in \mathbb{Z}_{\geq 0}\}
+\iff & i-l_j+1 \in \{2^{k+1}\cdot m+2^k \mid m \in \mathbb{Z}_{\geq 0}\} \\[6pt]
+\iff & i \in \{2^{k+1}\cdot m+2^k+l_j-1 \mid m \in \mathbb{Z}_{\geq 0}\}
 \end{aligned}
 $$
 
@@ -2860,22 +2860,24 @@ signed main() {
 <div class="spoiler-content">
 Let us define:
 <ul>
-    <li>$\displaystyle \text{pre}_i = \sum_{\substack{j=1 \\[3pt] A_j \le i}}^N1$: the number of integers $\le i$ present in the array $A$, $\quad \forall \; 1 \le i \le M$ where $M = 10^6$.</li>
-    <li>$\text{freq}_i = \text{pre}_i - \text{pre}_{i-1}$: the number of times integer $i$ is present in the array $A$, $\quad \forall \; 1 \le i \le M$.</li>
+    <li>$\displaystyle \text{freq}_i = \sum_{\substack{j=1 \\[3pt] A_j = i}}^N1$: the number of times integer $i$ is present in the array $A$, $\quad \forall \; 1 \le i \le M$ where $M = 10^6$.</li>
+    <li>$\displaystyle \text{pre}_i = \sum_{j=1}^i\text{freq}_j$: the number of integers $\le i$ present in the array $A$, $\quad \forall \; 1 \le i \le M$.</li>
 </ul><br>
 
 Using the <b>Contribution Technique</b>, we can rewrite the given expression as:
 
 $$
-\sum_{i=1}^M{\text{freq}_i\cdot \sum_{j=i+1}^M\left\lfloor \frac{j}{i} \right\rfloor} + \sum_{i=1}^M\left(\begin{array}{cc} \text{freq}_i \\ 2 \\  \end{array}\right)
+\sum_{i=1}^M{\text{freq}_i\cdot \sum_{j=i+1}^M\left(\text{freq}_j \cdot \left\lfloor \frac{j}{i} \right\rfloor\right)} + \sum_{i=1}^M\left(\begin{array}{cc} \text{freq}_i \\ 2 \\  \end{array}\right)
 $$
+
+where the second term accounts for the contribution from the case $j = i$.<br><br>
 
 Using the <b>Contribution Technique</b> again, we can rewrite the given expression as:
 
 $$
 \begin{aligned}
-& \sum_{i=1}^M{\text{freq}_i\cdot \sum_{k=1}^{\left\lfloor \frac{M}{i} \right\rfloor}\sum_{\substack{j=i+1 \\[3pt] \left\lfloor \frac{j}{i} \right\rfloor = k}}^Mk} + \sum_{i=1}^M\left(\begin{array}{cc} \text{freq}_i \\ 2 \\  \end{array}\right) \\[6pt]
-=\; & \sum_{i=1}^M{\text{freq}_i\cdot \sum_{k=1}^{\left\lfloor \frac{M}{i} \right\rfloor}{k \cdot \sum_{\substack{j=i+1 \\[3pt] \left\lfloor \frac{j}{i} \right\rfloor = k}}^M1}} + \sum_{i=1}^M\left(\begin{array}{cc} \text{freq}_i \\ 2 \\  \end{array}\right)
+& \sum_{i=1}^M{\text{freq}_i\cdot \sum_{k=1}^{\left\lfloor \frac{M}{i} \right\rfloor}\sum_{\substack{j=i+1 \\[3pt] \left\lfloor \frac{j}{i} \right\rfloor = k}}^M(\text{freq}_j \cdot k)} + \sum_{i=1}^M\left(\begin{array}{cc} \text{freq}_i \\ 2 \\  \end{array}\right) \\[6pt]
+=\; & \sum_{i=1}^M{\text{freq}_i\cdot \sum_{k=1}^{\left\lfloor \frac{M}{i} \right\rfloor}{k \cdot \sum_{\substack{j=i+1 \\[3pt] \left\lfloor \frac{j}{i} \right\rfloor = k}}^M\text{freq}_j}} + \sum_{i=1}^M\left(\begin{array}{cc} \text{freq}_i \\ 2 \\  \end{array}\right)
 \end{aligned}
 $$
 
@@ -2908,7 +2910,7 @@ We can rewrite the given expression as:
 
 $$
 \begin{aligned}
-& \sum_{i=1}^M{\text{freq}_i\cdot \sum_{k=1}^{\left\lfloor \frac{M}{i} \right\rfloor}{k \cdot \sum_{j = l_{i,k}}^{r_{i,k}}1}} + \sum_{i=1}^M\left(\begin{array}{cc} \text{freq}_i \\ 2 \\  \end{array}\right) \\[6pt]
+& \sum_{i=1}^M{\text{freq}_i\cdot \sum_{k=1}^{\left\lfloor \frac{M}{i} \right\rfloor}{k \cdot \sum_{j = l_{i,k}}^{r_{i,k}}\text{freq}_j}} + \sum_{i=1}^M\left(\begin{array}{cc} \text{freq}_i \\ 2 \\  \end{array}\right) \\[6pt]
 =\; & \sum_{i=1}^M{\text{freq}_i\cdot \sum_{k=1}^{\left\lfloor \frac{M}{i} \right\rfloor}{k \cdot \left(\text{pre}_{r_{i,k}} - \text{pre}_{l_{i,k}-1}\right)}} + \sum_{i=1}^M\left(\begin{array}{cc} \text{freq}_i \\ 2 \\  \end{array}\right)
 \end{aligned}
 $$
@@ -2976,7 +2978,67 @@ signed main() {
 <details>
 <summary data-type="solution">Solution</summary>
 <div class="spoiler-content">
-To be added.
+Formally, we have to count the number of pairs $(l,r)$ such that:
+<ul>
+    <li>$0 \le l \le r < N$</li>
+    <li>The substring $S_l S_{l+1} \ldots S_{r}$ evaluated as an integer is divisible by $P$.</li>
+</ul><br>
+
+Let us define:
+
+<ul>
+    <li>$\displaystyle \text{suf}_i = \sum_{j=i}^{N-1}\left(S_j \cdot 10^{N-1-j}\right)$: the string $S_i S_{i+1}\ldots S_{N-1}$ evaluated as an integer, $\quad \forall \; 0 \le i < N$.</li>
+</ul><br>
+
+We can build the $\text{suf}$ array using the following relations:
+
+$$
+\begin{aligned}
+& \text{suf}_N = 0 \\[6pt]
+& \text{suf}_i = \text{suf}_{i+1} + S_i \cdot 10^{N-1-i}, \quad \forall \; 0 \le i < N
+\end{aligned}
+$$
+
+The substring $S_l S_{l+1} \ldots S_{r}$ evaluated as an integer can be written as:
+$$\frac{\text{suf}_l - \text{suf}_{r+1}}{10^{N-1-r}}$$
+
+Replacing $r \rightarrow r-1$, we can rewrite both the conditions as:
+
+<ul>
+    <li>$0 \le l < r \le N$</li>
+    <li>$\displaystyle \frac{\text{suf}_l - \text{suf}_{r}}{10^{N-r}} \bmod P = 0$</li>
+</ul><br>
+
+From here, the following two cases arise:
+
+<ul>
+    <li><b>Case 1:</b> $\gcd(P,10) \neq 1$ or equivalently $P \in \{2,5\}$<br><br>
+
+    <span style="color:Brown;"><b>FACT:</b></span> An integer is divisible by $2$ iff it's last digit is divisible by $2$.<br>
+    <span style="color:Brown;"><b>FACT:</b></span> An integer is divisible by $5$ iff it's last digit is divisible by $5$.<br><br>
+
+    Thus, we can fix each index $i$ such that $S_i \bmod P = 0$ as the last digit and count the substrings ending at $i$ that are divisible by $P$. Formally, the count is given by:
+    $$\sum_{\substack{i=0 \\ S_i \bmod P = 0}}^{N-1}(i+1)$$
+    </li><br>
+
+    <li><b>Case 2:</b> $\gcd(P,10) = 1$<br><br>
+    We can simplify the second condition as:
+    $$
+    \begin{aligned}
+    & \frac{\text{suf}_l - \text{suf}_{r}}{10^{N-r}} \bmod P = 0 \\[6pt]
+    \iff & (\text{suf}_l - \text{suf}_{r})\left({10^{N-r}}\right)^{-1} \bmod P = 0 \\[6pt]
+    \iff & (\text{suf}_l - \text{suf}_{r}) \bmod P = 0 \left(\because \gcd(P,10)=1 \Rightarrow \left({10^{N-r}}\right)^{-1} \bmod P \neq 0\right)\\[6pt]
+    \iff & \text{suf}_r \bmod P = \text{suf}_l \bmod P
+    \end{aligned}
+    $$
+
+    To count the number of pairs $(l,r)$ satisfying this, we can iterate on $l$ from $N-1$ to $0$ and keep track of the frequencies of $\text{suf}_r \bmod P$ for $l < r \le N$.
+    </li>
+
+</ul><br>
+
+<b>Time Complexity:</b> $O(N+P)$
+
 </div>
 </details>
 <details>
@@ -2998,33 +3060,23 @@ signed main() {
     string s;
     cin >> s;
 
-    if (p == 2 || p == 5) {
-        int ans = 0;
-        for (int i = 0; i < n; i++) {
-            int d = s[i] - '0';
-            if (p == 2 && d % 2 == 0)
-                ans += i + 1;
-            if (p == 5 && (d == 0 || d == 5))
-                ans += i + 1;
-        }
-
-        cout << ans << endl;
-    }
-
+    int ans = 0;
+    if (p == 2 || p == 5)
+        for (int i = 0; i < n; i++)
+            ans += (i + 1) * ((s[i] - '0') % p == 0);
     else {
+        int suf = 0, pw10 = 1;
         vector<int> freq(p);
-        freq[0] = 1;
+        freq[suf] = 1;
 
-        int ans = 0, suf = 0, pw = 1;
-        for (int i = n - 1; i >= 0; i--) {
-            int d = s[i] - '0';
-            suf = (suf + pw * d) % p;
+        for (int l = n - 1; l >= 0; l--) {
+            suf = (suf + (s[l] - '0') * pw10) % p;
             ans += freq[suf];
-            freq[suf]++, pw = (pw * 10) % p;
+            freq[suf]++, pw10 = (pw10 * 10) % p;
         }
-
-        cout << ans << endl;
     }
+
+    cout << ans << endl;
 
     return 0;
 }
