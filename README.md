@@ -23,7 +23,6 @@ A comprehensive collection of self-written, in-depth articles covering algorithm
 - Extended Euclidean Algorithm (Coming Soon)
 - Modular Multiplicative Inverse (Coming Soon)
 - Linear Diophantine Equations (Coming Soon)
-- Euler's Totient Function (Coming Soon)
 - Combinatorics (Coming Soon)
 - Inclusion Exclusion Principle (Coming Soon)
 - GCD and LCM (Coming Soon)
@@ -86,6 +85,7 @@ A comprehensive collection of self-written, in-depth articles covering algorithm
 #### Maths
 - Matrix Exponentiation (Coming Soon)
 - Manhattan Distance (Coming Soon)
+- Number Theoretic Functions (Coming Soon)
 - XOR Basis (Coming Soon)
 - Chinese Remainder Theorem (Coming Soon)
 - Dilworth's Theorem (Coming Soon)

@@ -39,8 +39,6 @@ phases:
             url: /phase1/maths/modular-multiplicative-inverse
           - title: Linear Diophantine Equations
             url: /phase1/maths/linear-diophantine-equations
-          - title: Euler's Totient Function
-            url: /phase1/maths/eulers-totient-function
           - title: Combinatorics
             url: /phase1/maths/combinatorics
           - title: Inclusion Exclusion Principle
@@ -166,6 +164,8 @@ phases:
             url: /phase2/maths/matrix-exponentiation
           - title: Manhattan Distance
             url: /phase2/maths/manhattan-distance
+          - title: Number Theoretic Functions
+            url: /phase2/maths/number-theoretic-functions
           - title: XOR Basis
             url: /phase2/maths/xor-basis
           - title: Chinese Remainder Theorem
