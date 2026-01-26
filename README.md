@@ -23,6 +23,9 @@ A comprehensive collection of self-written, in-depth articles covering algorithm
 - Extended Euclidean Algorithm (Coming Soon)
 - Modular Multiplicative Inverse (Coming Soon)
 - Linear Diophantine Equations (Coming Soon)
+- Discrete Logarithm (Coming Soon)
+- Primitive Root (Coming Soon)
+- Discrete Root (Coming Soon)
 - Combinatorics (Coming Soon)
 - Inclusion Exclusion Principle (Coming Soon)
 - GCD and LCM (Coming Soon)
@@ -123,6 +126,12 @@ A comprehensive collection of self-written, in-depth articles covering algorithm
 - 2-SAT (Coming Soon)
 - Max Flow (Coming Soon)
 - Min Cost Max Flow (Coming Soon)
+
+#### Strings
+- KMP Algorithm (Coming Soon)
+- Z-Algorithm (Coming Soon)
+- Manacher's Algorithm (Coming Soon)
+- Suffix Array (Coming Soon)
 
 #### Miscellaneous
 - Parallel Binary Search (Coming Soon)

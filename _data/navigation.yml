@@ -39,6 +39,12 @@ phases:
             url: /phase1/maths/modular-multiplicative-inverse
           - title: Linear Diophantine Equations
             url: /phase1/maths/linear-diophantine-equations
+          - title: Discrete Logarithm
+            url: /phase1/maths/discrete-logarithm
+          - title: Primitive Root
+            url: /phase1/maths/primitive-root
+          - title: Discrete Root
+            url: /phase1/maths/discrete-root
           - title: Combinatorics
             url: /phase1/maths/combinatorics
           - title: Inclusion Exclusion Principle
@@ -241,6 +247,18 @@ phases:
             url: /phase3/graphs/max-flow
           - title: Min Cost Max Flow
             url: /phase3/graphs/min-cost-max-flow
+
+      - title: Strings
+        id: strings
+        items:
+          - title: KMP Algorithm
+            url: /phase3/strings/kmp-algorithm
+          - title: Z-Algorithm
+            url: /phase3/strings/z-algorithm
+          - title: Manacher's Algorithm
+            url: /phase3/strings/manachers-algorithm
+          - title: Suffix Array
+            url: /phase3/strings/suffix-array
 
       - title: Miscellaneous
         id: misc
